@@ -15,8 +15,8 @@ package com.mmmfingers;
 
 public class Constants {
     // screen
-    public final static int ORIGINAL_SCREEN_HEIGHT = 1080;
-    public final static int ORIGINAL_SCREEN_WIDTH = 2028;
+    public final static int ORIGINAL_SCREEN_HEIGHT = 2080;
+    public final static int ORIGINAL_SCREEN_WIDTH = 1080;
     public static final int SCREEN_TO_BOARD_LEFT_MARGIN = 339;
 
     // board constants
