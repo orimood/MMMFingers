@@ -18,7 +18,7 @@ import android.graphics.Bitmap;
  * *************************************************************
  */
 
-public class Animation {
+public class Animation extends android.view.animation.Animation {
     // a bitmap table to keep the numbers of the image sprites [0]Sprite [1] sprite [2]sprite...[x] sprite
     private Bitmap[] sprites;
 

@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;

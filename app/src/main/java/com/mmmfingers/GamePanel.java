@@ -18,7 +18,6 @@ package com.mmmfingers;
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -31,6 +30,9 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.view.GestureDetectorCompat;
@@ -245,6 +247,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         animatedBanner.setShow(false);
         animatedBanner.getAnimation().setPlayedOnce(false);
         animatedBanner.getAnimation().setDelay(150);
+        
 
         /**
          * Here we create animated objects:
@@ -685,7 +688,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         int xPosition = (int) (motionEvent.getX() / scaleFactorXMul);
         int yPosition = (int) (motionEvent.getY() / scaleFactorYMul);
        // boy1.flipImage(true, false);
-        for (int i = 0; i < 360; i+=10)
+        for (int i = 0; i < 360; i+=1)
           boy1.rotateImage(i);
 
     }
