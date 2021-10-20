@@ -148,6 +148,7 @@ public class AnimatedSpritesObject extends GameObject {
      * @param angle
      */
     public void rotateImage(float angle) {
+
         spritesArray = saveSpritesArray;
         Bitmap[] bOutput = new Bitmap[spritesArray.length];
         Matrix matrix = new Matrix();
@@ -161,6 +162,7 @@ public class AnimatedSpritesObject extends GameObject {
         }
         spritesArray = bOutput;
         animation.setSprites(spritesArray);
+
     }
 
     /**

@@ -55,6 +55,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
     // canvas of the game, we draw our pictures on this CANVAS
     public static Canvas canvas;
 
+
     // the background of our game
     Background background;
 
@@ -67,6 +68,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
     // init game objects - a boy and a girl
     Boy boy1;
     Girl girl1;
+    Obsti1 obsti1;
     GirlJumping girlJumping;
     // enum for girl walking direction
     WalkingDirection girlWalkingDirection1;
@@ -288,7 +290,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         troll1.getAnimation().setSpriteRow(2);
         troll1.rotateImage(-90);
 
-
+        // create obsti object
+        obsti1 = new Obsti1(BitmapFactory.decodeResource(getResources(), R.drawable.obsti),1,0);
+        obsti1.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
+        obsti1.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2);
         // play game start sound
         playStartSound();
 
