@@ -69,6 +69,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
     Boy boy1;
     Girl girl1;
     Obsti1 obsti1;
+
     GirlJumping girlJumping;
     // enum for girl walking direction
     WalkingDirection girlWalkingDirection1;
@@ -291,9 +292,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         troll1.rotateImage(-90);
 
         // create obsti object
-        obsti1 = new Obsti1(BitmapFactory.decodeResource(getResources(), R.drawable.obsti),1,0);
-        obsti1.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        obsti1.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2);
+        obsti1 = new Obsti1(BitmapFactory.decodeResource(getResources(), R.drawable.obsti)
+                , 1, 1);
+        obsti1.setX(Constants.ORIGINAL_SCREEN_WIDTH / 5);
+        obsti1.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 5);
         // play game start sound
         playStartSound();
 

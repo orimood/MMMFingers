@@ -22,19 +22,19 @@ import android.widget.ImageView;
 
 class Obsti1 extends AnimatedSpritesObject {
 
-        // start time pointer, for many uses
-        private long startTime;
+    // start time pointer, for many uses
+    private long startTime;
 
-        public Obsti1(Bitmap imageThatHasSprites, int numberOfSprites, int rowLength) {
-            super(imageThatHasSprites, numberOfSprites, rowLength);
+    public Obsti1(Bitmap imageThatHasSprites, int numberOfSprites, int rowLength) {
+        super(imageThatHasSprites, numberOfSprites, rowLength);
 
-            //Now we initiate the timer so we can use in the update method
-            startTime = System.nanoTime();
+        //Now we initiate the timer so we can use in the update method
+        startTime = System.nanoTime();
 
-        }
+    }
 
-        @Override
-        public void update() {
-            animation.update();
-        }
+    @Override
+    public void update() {
+        animation.update();
+    }
 }
