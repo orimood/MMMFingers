@@ -74,7 +74,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
     // enum for girl walking direction
     WalkingDirection girlWalkingDirection1;
 
-    Troll troll1;
+
 
     // TODO for later use for game score
     private int score;
@@ -281,21 +281,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         girlJumping.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
         girlJumping.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 3);
 
-        // create troll object
-        troll1 = new Troll(BitmapFactory.decodeResource(getResources(), R.drawable.troll)
-                , 25, 5);
-        troll1.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        troll1.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2);
-        troll1.setTrollWalkingDirection(WalkingDirection.RIGHT);
-        // set animated row 2 - troll animated walking right
-        troll1.getAnimation().setSpriteRow(2);
-        troll1.rotateImage(-90);
+
 
         // create obsti object
         obsti1 = new Obsti1(BitmapFactory.decodeResource(getResources(), R.drawable.obsti)
                 , 1, 1);
-        obsti1.setX(Constants.ORIGINAL_SCREEN_WIDTH / 5);
-        obsti1.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 5);
+        obsti1.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
+        obsti1.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 4);
         // play game start sound
         playStartSound();
 
@@ -397,8 +389,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
             boy1.update();
             girl1.update();
-            troll1.update();
+
             girlJumping.update();
+
+            obsti1.update();
 
             if (gameLogic.isCollisionDetected(boy1, girl1)) {
                 girl1.flipImage(true, false);
@@ -466,8 +460,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
                 boy1.draw(canvas);
                 girl1.draw(canvas);
-                troll1.draw(canvas);
+
                 girlJumping.draw(canvas);
+
+                obsti1.draw(canvas);
 
             }
             // game not stared, so show game start message
@@ -485,6 +481,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
             canvas.restoreToCount(savedState);
         }
     }//end draw
+
 
     /**
      * show message of state:
@@ -614,51 +611,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         boy1.flipImage(false, true);
         // boy1.rotateImage(75);
 
-        switch (troll1.getTrollWalkingDirection()) {
-            case RIGHT:
-                troll1.setTrollWalkingDirection(WalkingDirection.UP_RIGHT);
-                troll1.getAnimation().setSpriteRow(1);
-                troll1.rotateImage(-90);
-                break;
-            case UP_RIGHT:
-                troll1.setTrollWalkingDirection(WalkingDirection.UP);
-               troll1.getAnimation().setSpriteRow(0);
-             //   troll1.rotateImage(-135);
-                break;
-            case UP:
-                troll1.setTrollWalkingDirection(WalkingDirection.UP_LEFT);
-                troll1.getAnimation().setSpriteRow(1);
-                troll1.rotateImage(-90);
-                troll1.flipImage(true,false);
-                break;
-            case UP_LEFT:
-                troll1.setTrollWalkingDirection(WalkingDirection.LEFT);
-                troll1.getAnimation().setSpriteRow(2);
-                troll1.rotateImage(-90);
-                troll1.flipImage(true,false);
-                break;
-            case LEFT:
-                troll1.setTrollWalkingDirection(WalkingDirection.DOWN_LEFT);
-                troll1.getAnimation().setSpriteRow(3);
-                troll1.rotateImage(-90);
-                troll1.flipImage(true,false);
-                break;
-            case DOWN_LEFT:
-                troll1.setTrollWalkingDirection(WalkingDirection.DOWN);
-                troll1.getAnimation().setSpriteRow(4);
-              //  troll1.rotateImage(-180);
-                break;
-            case DOWN:
-                troll1.setTrollWalkingDirection(WalkingDirection.DOWN_RIGHT);
-                troll1.getAnimation().setSpriteRow(3);
-                troll1.rotateImage(-90);
-                break;
-            case DOWN_RIGHT:
-                troll1.setTrollWalkingDirection(WalkingDirection.RIGHT);
-                troll1.getAnimation().setSpriteRow(2);
-                //  troll1.rotateImage(-180);
-                break;
-        }
+
 
         return true;
     }
@@ -692,13 +645,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
     public void onLongPress(MotionEvent motionEvent) {
         //   girl1.rotateImage(75);
         //   girl1.flipImage(true, false);
+        float x = 18;
+
         int xPosition = (int) (motionEvent.getX() / scaleFactorXMul);
         int yPosition = (int) (motionEvent.getY() / scaleFactorYMul);
        // boy1.flipImage(true, false);
-        for (int i = 0; i < 360; i+=1)
+        for (float i = 0; i < 360; i+=1)
           boy1.rotateImage(i);
 
     }
+
 
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {

@@ -35,6 +35,8 @@ class Obsti1 extends AnimatedSpritesObject {
 
     @Override
     public void update() {
+
         animation.update();
+
     }
 }
