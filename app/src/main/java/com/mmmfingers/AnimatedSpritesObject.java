@@ -12,7 +12,7 @@ import android.util.Log;
  * @since version 2.00
  * Study Android,
  * Modi-in, YACHAD high-school.
- *
+ * <p>
  * *************************************************************
  * this class extends the GameObject class
  * and adds:
@@ -29,17 +29,21 @@ public class AnimatedSpritesObject extends GameObject {
     protected Animation animation = new Animation();
 
     // set an array of bitmaps for our sprites
-    Bitmap[] spritesArray;
+    private Bitmap[] spritesArray;
+
     // save bitmap  - this is used for rotate method
-    Bitmap[] saveSpritesArray;
+    final private Bitmap[] saveSpritesArray;
+
+    private float rotationAngle;
 
     // bitmap image from where we cut our sprites
     private Bitmap spriteSheet;
 
     // start time pointer, for many uses
-    private long startTime;
+    private long lastUpdateTime;
 
-    /** So to create an animated object
+    /**
+     * So to create an animated object
      * first we pass the bit map image (the image that has the sprites) - imageThatHasSprites
      * the dimensions of each sprite we get from the bitmap image
      * numberOfSprites -  number Of Sprites in the all image
@@ -56,7 +60,9 @@ public class AnimatedSpritesObject extends GameObject {
          * so we can create a bitmap
          * for each sprite
          */
-        height = imageThatHasSprites.getHeight() /(numberOfSprites/rowLength);
+        imageThatHasSprites.setHasAlpha(true);
+
+        height = imageThatHasSprites.getHeight() / (numberOfSprites / rowLength);
         width = imageThatHasSprites.getWidth() / rowLength;
 
         // set an array of bitmaps for our sprites
@@ -87,35 +93,50 @@ public class AnimatedSpritesObject extends GameObject {
         animation.setDelay(100);
 
         //Now we initiate the timer so we can use in the update method
-        startTime = System.nanoTime();
+        lastUpdateTime = System.nanoTime();
     }//end constructor
+
 
     // update method
     public void update() {
-        /*
-        TODO later
+        long newUpdateTime = System.nanoTime();
         // here is the timer of our player millis
-        long elapsed = (System.nanoTime() - startTime) / 1000000;
+        long elapsed = (newUpdateTime - lastUpdateTime) / 1000000;
 
         // Now when our timer gets past xxx millis we want the to do something
-        if (elapsed > 100) {
+        if (elapsed >= 40) {
             // here is our code
+            doAnimate();
 
-
-            // set back start time
-            startTime = System.nanoTime();
+            lastUpdateTime = newUpdateTime;
         }
+
         // update the animation
         animation.update();
-        */
     }//end update
 
+    protected void doAnimate() {
+        // by default do nothing
+    }
 
     /**
      * draw our object on the canvas (screen)
      */
     public void draw(Canvas canvas) {
-        if (show) canvas.drawBitmap(animation.getImage(), x, y, null);
+        if (show) {
+            Matrix matrix = new Matrix();
+            Bitmap image = animation.getImage();
+
+            // rotate
+            matrix.postTranslate(-image.getWidth() / 2.0f, -image.getHeight() / 2.0f);
+            matrix.postRotate(rotationAngle);
+            matrix.postTranslate(image.getWidth() / 2.0f, image.getHeight() / 2.0f);
+
+            // placement
+            matrix.postTranslate(x, y);
+
+            canvas.drawBitmap(animation.getImage(), matrix, null);
+        }
     }//end draw
 
 
@@ -130,7 +151,7 @@ public class AnimatedSpritesObject extends GameObject {
             matrix.postScale(1f, -1f);
 
         for (int i = 0; i < spritesArray.length; i++) {
-            Log.e("gureli", "flipImage 1: " + width + ":" + height );
+            Log.e("gureli", "flipImage 1: " + width + ":" + height);
             Log.e("gureli", "flipImage 2: " + spritesArray[i].getWidth() + ":" + spritesArray[i].getHeight());
             bOutput[i] = Bitmap.createBitmap(spritesArray[i], 0, 0, spritesArray[i].getWidth(),
                     spritesArray[i].getHeight(), matrix, true);
@@ -139,7 +160,8 @@ public class AnimatedSpritesObject extends GameObject {
         animation.setSprites(spritesArray);
     }
 
-    /** this will rotate the image clockwise, by "angle"
+    /**
+     * this will rotate the image clockwise, by "angle"
      * pay attention:
      * the rotation is always done from the base original image "spritesArray", this is the reason why we
      * use the "saveSpritesArray" to save the base original image to it, and when we call this method it
@@ -148,23 +170,8 @@ public class AnimatedSpritesObject extends GameObject {
      * @param angle
      */
     public void rotateImage(float angle) {
-
-        spritesArray = saveSpritesArray;
-        Bitmap[] bOutput = new Bitmap[spritesArray.length];
-        Matrix matrix = new Matrix();
-        matrix.preScale(1.0f, 1.0f);
-        matrix.setRotate(angle);
-        for (int i = 0; i < spritesArray.length; i++) {
-            Log.e("gureli", "rotateImage 1: " + width + ":" + height);
-            bOutput[i] = Bitmap.createBitmap(spritesArray[i], 0, 0, spritesArray[i].getWidth(),
-                    spritesArray[i].getHeight(), matrix, true);
-            Log.e("gureli", "rotateImage 2: " + bOutput[i].getWidth() + ":" + bOutput[i].getHeight());
-        }
-        spritesArray = bOutput;
-        animation.setSprites(spritesArray);
-
+        rotationAngle = (rotationAngle + angle) % 360.0f;
     }
-
 
 
     /**
@@ -184,6 +191,14 @@ public class AnimatedSpritesObject extends GameObject {
 
     public void setShow(boolean show) {
         this.show = show;
+    }
+
+    public float getRotationAngle() {
+        return rotationAngle;
+    }
+
+    public void setRotationAngle(float rotationAngle) {
+        this.rotationAngle = rotationAngle;
     }
 
     // this will retrieve the current sprite image

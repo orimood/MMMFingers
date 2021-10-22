@@ -12,15 +12,29 @@ import android.graphics.Bitmap;
  */
 
 public class Boy extends AnimatedSpritesObject {
+
+    private boolean isRotate;
+
     public Boy(Bitmap imageThatHasSprites, int numberOfSprites, int rowLength) {
         super(imageThatHasSprites, numberOfSprites, rowLength);
+    }
 
+    public void rotate() {
+        if (isRotate) {
+            return;
+        }
+        setRotationAngle(0);
+        isRotate = true;
     }
 
     @Override
-    public void update() {
-        // here is our code
-        animation.update();
+    protected void doAnimate() {
+        if (isRotate) {
+            rotateImage(9);
+        }
 
+        if (getRotationAngle() == 0) {
+            isRotate = false;
+        }
     }
 }

@@ -6,7 +6,7 @@ package com.mmmfingers;
  * @since version 2.00
  * Study Android,
  * Modi'in, Yachad high-school.
- *
+ * <p>
  * *************************************************************
  * Class description:
  * <p>
@@ -30,9 +30,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.view.GestureDetectorCompat;
@@ -42,7 +39,8 @@ import java.util.Random;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, GestureDetector.OnGestureListener,
         GestureDetector.OnDoubleTapListener {
 
-    /** Now we will set our game screen width and height
+    /**
+     * Now we will set our game screen width and height
      * display size in pixels
      * the screen upper left corner is 0,0
      */
@@ -68,12 +66,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
     // init game objects - a boy and a girl
     Boy boy1;
     Girl girl1;
-    Obsti1 obsti1;
+    Obstacle obstacle;
 
     GirlJumping girlJumping;
     // enum for girl walking direction
     WalkingDirection girlWalkingDirection1;
-
 
 
     // TODO for later use for game score
@@ -103,8 +100,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
     /**
      * ******************************************************************
-     *     game logic class - the "BRAIN" of our game, rules and more ...
-     *     very important class - all the game algorithms are there
+     * game logic class - the "BRAIN" of our game, rules and more ...
+     * very important class - all the game algorithms are there
      */
     GameLogic gameLogic;
     /**
@@ -114,10 +111,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
     /**
      * ******************************************************************
-     *     game loop class - this thread loops our game screen 30 frame for second ...
-     *     very important class - it address (by its run method) the update and draw method
-     *     on gamePanel methods, by that it updates all game objects parameters (and more things
-     *     that are periodically) and the draw method which refreshes the screen
+     * game loop class - this thread loops our game screen 30 frame for second ...
+     * very important class - it address (by its run method) the update and draw method
+     * on gamePanel methods, by that it updates all game objects parameters (and more things
+     * that are periodically) and the draw method which refreshes the screen
      */
     private MainThread thread;
     /**
@@ -127,21 +124,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
     /**
      * This (ENUM CLASS) will help us navigate in our game states
-    // current game state - start of the game MESSAGE SHOWN
+     * // current game state - start of the game MESSAGE SHOWN
      */
     GameState gameState = GameState.GAME_START_STATE;
 
-    /** TODO later implementation of different screen different with resolutions
+    /**
+     * TODO later implementation of different screen different with resolutions
      * This a very important stage to be implemented - for dealing different phone with
      * different screen resolutions ...
-     *
-     *
+     * <p>
+     * <p>
      * When we are implementing graphic application we need to adjust our application
      * to other possible phone that will operate our application, which will have screen different resolutions
      * for that reason. we use a vars we call "xChangedFactor" and "yChangedFactor" (for x and y of screen)
      * We will need it on two places
-     *      1. when drawing images (draw method),
-     *      2 - on touching the screen (onTouchEvent) method
+     * 1. when drawing images (draw method),
+     * 2 - on touching the screen (onTouchEvent) method
      * This vars will be initiated at first when we will get scaling factor of the
      * current phone screen we are using
      */
@@ -153,7 +151,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
     public GamePanel(Context context, int WIDTH, int HEIGHT) {
 
         /**
-        // context we receive from our activity,
+         // context we receive from our activity,
          by the COMMAND:
          setContentView(new GamePanel(this, WIDTH, HEIGHT)) - see the MainActivity code;
          context - is the context (HEKSHER in hebrew) of our activity
@@ -235,9 +233,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         gameStartMessage.setX((Constants.ORIGINAL_SCREEN_WIDTH / 2) - (gameStartMessage.getWidth() / 2));
         gameStartMessage.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 2) - (gameStartMessage.getHeight() / 2));
 
-       // background of the game, some background picture
+        // background of the game, some background picture
         background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background),
-                1,1);
+                1, 1);
 
         // set message banner - for application use, this object is animated object
         animatedBanner = new AnimatedBanner(BitmapFactory.decodeResource(getResources(), R.drawable.animated_banner),
@@ -250,7 +248,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         animatedBanner.setShow(false);
         animatedBanner.getAnimation().setPlayedOnce(false);
         animatedBanner.getAnimation().setDelay(150);
-        
+
 
         /**
          * Here we create animated objects:
@@ -258,7 +256,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
          * the image,
          * numberOfSprites
          * and, rowLength
-        */
+         */
         // create boy object
         boy1 = new Boy(BitmapFactory.decodeResource(getResources(), R.drawable.jumping_boy),
                 6, 6);
@@ -282,12 +280,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         girlJumping.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 3);
 
 
-
         // create obsti object
-        obsti1 = new Obsti1(BitmapFactory.decodeResource(getResources(), R.drawable.obsti)
+        obstacle = new Obstacle(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle)
                 , 1, 1);
-        obsti1.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        obsti1.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 4);
+        obstacle.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
+        obstacle.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2);
         // play game start sound
         playStartSound();
 
@@ -297,17 +294,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
     }
 
     /**
-     This is called immediately after any structural changes (format or size) have been made to the surface.
+     * This is called immediately after any structural changes (format or size) have been made to the surface.
      */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
     }
 
     /**
-     This is called immediately before a surface is being destroyed.
-     After returning from this call, you should no longer try to access this surface.
-     If you have a rendering thread that directly accesses the surface, you must ensure
-     that thread is no longer touching the Surface before returning from this function.
+     * This is called immediately before a surface is being destroyed.
+     * After returning from this call, you should no longer try to access this surface.
+     * If you have a rendering thread that directly accesses the surface, you must ensure
+     * that thread is no longer touching the Surface before returning from this function.
      */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
@@ -364,11 +361,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
                 case MotionEvent.ACTION_CANCEL:
                     break;
             }
-        }
-        else
+        } else
             // set isPlaying to start the game, after first tap on the screen
-            if (action==MotionEvent.ACTION_UP)
-                    isPlaying = true;
+            if (action == MotionEvent.ACTION_UP)
+                isPlaying = true;
         return true;
     }
 
@@ -392,7 +388,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
             girlJumping.update();
 
-            obsti1.update();
+            obstacle.update();
 
             if (gameLogic.isCollisionDetected(boy1, girl1)) {
                 girl1.flipImage(true, false);
@@ -408,7 +404,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
      * GamePanel cooperates with our thread
      * So our game draw new screen every 33 milli seconds
      * GamePanel draw method , SurfaceView override
-     *
      */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -437,7 +432,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
                  * the defaults of our screen are in the Constants class
                  * in this case: ORIGINAL_SCREEN_WIDTH, and ORIGINAL_SCREEN_HEIGHT
                  *
-                */
+                 */
                 canvas.scale(scaleFactorX * scaleFactorXMul, scaleFactorY * scaleFactorYMul);
 
                 // draw the background
@@ -463,7 +458,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
                 girlJumping.draw(canvas);
 
-                obsti1.draw(canvas);
+                obstacle.draw(canvas);
 
             }
             // game not stared, so show game start message
@@ -473,7 +468,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
                 canvas.drawColor(Color.argb(50, 0, 102, 102));
                 canvas.scale(scaleFactorX * scaleFactorXMul, scaleFactorY * scaleFactorYMul);
                 // set game start message on middle of x coordinate of the screen
-                gameStartMessage.setX((Constants.ORIGINAL_SCREEN_WIDTH / 2) -  (gameStartMessage.getWidth() / 2));
+                gameStartMessage.setX((Constants.ORIGINAL_SCREEN_WIDTH / 2) - (gameStartMessage.getWidth() / 2));
                 gameStartMessage.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 2) - (gameStartMessage.getHeight() / 2));
                 gameStartMessage.draw(canvas);
             }
@@ -496,8 +491,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         // set text to Bold
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
         // write in the message
-       canvas.drawText(message, WIDTH / 2 - (animatedBanner.getWidth() / 2) + 50,
-                (HEIGHT / 2) - 30 , paint);
+        canvas.drawText(message, WIDTH / 2 - (animatedBanner.getWidth() / 2) + 50,
+                (HEIGHT / 2) - 30, paint);
     }// end drawText
 
     /**
@@ -506,6 +501,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
     public void playSoundPieceMove() {
         pieceMoveSound.play(pieceMoveSoundID, 0.5f, 0.5f, 1, 0, 1);
     }
+
     public void playSoundApplause() {
         applauseSound.play(applauseSoundID, 0.2f, 0.2f, 1, 0, 1);
     }
@@ -527,7 +523,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
     /**
      * setter and Getters **********************************************************
-     *
      */
     public static int getWIDTH() {
         return WIDTH;
@@ -568,7 +563,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         this.animatedBanner = messageBanner;
     }
 
-   public Boy getBoy1() {
+    public Boy getBoy1() {
         return boy1;
     }
 
@@ -594,6 +589,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
     /**
      * Gesture methods
+     *
      * @param motionEvent
      * @return
      */
@@ -610,7 +606,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         gameLogic.changeDirection();
         boy1.flipImage(false, true);
         // boy1.rotateImage(75);
-
 
 
         return true;
@@ -643,16 +638,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
     @Override
     public void onLongPress(MotionEvent motionEvent) {
-        //   girl1.rotateImage(75);
-        //   girl1.flipImage(true, false);
-        float x = 18;
-
-        int xPosition = (int) (motionEvent.getX() / scaleFactorXMul);
-        int yPosition = (int) (motionEvent.getY() / scaleFactorYMul);
-       // boy1.flipImage(true, false);
-        for (float i = 0; i < 360; i+=1)
-          boy1.rotateImage(i);
-
+        // boy1.flipImage(true, false);
+        boy1.rotate();
     }
 
 
