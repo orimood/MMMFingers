@@ -67,8 +67,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
     Boy boy1;
     Girl girl1;
     Obstacle obstacle;
+    Obstacle2 obstacle2;
 
-    GirlJumping girlJumping;
+
+
     // enum for girl walking direction
     WalkingDirection girlWalkingDirection1;
 
@@ -274,17 +276,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         girlWalkingDirection1 = girl1.getGirlWalkingDirection();
 
         // create girl jumping object
-        girlJumping = new GirlJumping(BitmapFactory.decodeResource(getResources(), R.drawable.girl_jumping1)
-                , 6, 6);
-        girlJumping.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        girlJumping.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 3);
 
 
         // create obsti object
         obstacle = new Obstacle(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle)
                 , 1, 1);
+        obstacle.setHeight(100);
+        obstacle.setWidth(100);
         obstacle.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
         obstacle.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2);
+
+        obstacle2 = new Obstacle2(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle2)
+                , 1, 1);
+        obstacle2.setHeight(100);
+        obstacle2.setWidth(100);
+        obstacle2.setX(Constants.ORIGINAL_SCREEN_WIDTH / 5);
+        obstacle2.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 6);
         // play game start sound
         playStartSound();
 
@@ -386,9 +393,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
             boy1.update();
             girl1.update();
 
-            girlJumping.update();
 
             obstacle.update();
+            obstacle2.update();
 
             if (gameLogic.isCollisionDetected(boy1, girl1)) {
                 girl1.flipImage(true, false);
@@ -456,9 +463,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
                 boy1.draw(canvas);
                 girl1.draw(canvas);
 
-                girlJumping.draw(canvas);
+
 
                 obstacle.draw(canvas);
+                obstacle2.draw(canvas);
 
             }
             // game not stared, so show game start message

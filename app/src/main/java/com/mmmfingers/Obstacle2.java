@@ -3,9 +3,9 @@ package com.mmmfingers;
 import android.graphics.Bitmap;
 
 
-class Obstacle extends AnimatedSpritesObject {
+class Obstacle2 extends AnimatedSpritesObject {
 
-    public Obstacle(Bitmap imageThatHasSprites, int numberOfSprites, int rowLength) {
+    public Obstacle2(Bitmap imageThatHasSprites, int numberOfSprites, int rowLength) {
         super(imageThatHasSprites, numberOfSprites, rowLength);
     }
 
