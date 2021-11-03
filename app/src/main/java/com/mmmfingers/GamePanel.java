@@ -55,7 +55,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
 
     // the background of our game
-    Background background;
+    Background background, background1, background2;
 
     // game start message
     GameStartMessage gameStartMessage;
@@ -238,6 +238,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         // background of the game, some background picture
         background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background),
                 1, 1);
+        background1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background),
+                1, 1);
+        // background of the game, some background picture
+        background2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background),
+                1, 1);
+        background2.setY(-background2.height);
 
         // set message banner - for application use, this object is animated object
         animatedBanner = new AnimatedBanner(BitmapFactory.decodeResource(getResources(), R.drawable.animated_banner),
@@ -397,6 +403,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
             obstacle.update();
             obstacle2.update();
 
+
+            background1.update();
+            background2.update();
+
             if (gameLogic.isCollisionDetected(boy1, girl1)) {
                 girl1.flipImage(true, false);
                 gameLogic.changeDirection();
@@ -444,6 +454,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
                 // draw the background
                 background.draw(canvas);
+                background1.draw(canvas);
+                background2.draw(canvas);
 
                 // check if we have to show message banner of any kind of game state
                 switch (gameState) {
