@@ -6,7 +6,7 @@ package com.mmmfingers;
  * @since version 2.00
  * Study Android,
  * Modi'in, Yachad high-school.
- *
+ * <p>
  * This is the Main Activity of our game
  */
 
@@ -17,8 +17,6 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,19 +30,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //turn title off
+        // turn title off
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        // set screen landscape view
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+        // set screen portrait view
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
 
-
-        //set to full screen
+        // set to full screen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // get device screen size for game panel use
         Display display = getWindowManager().getDefaultDisplay();
+
         // display size in pixels
         Point size = new Point();
         display.getSize(size);
@@ -53,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         hideSystemUI();
 
-        //in this lesson  we will set the content view and we will create a new class
+        // in this lesson we will set the content view and we will create a new class
         setContentView(new GamePanel(this, WIDTH, HEIGHT));
     }
 

@@ -1,5 +1,6 @@
 package com.mmmfingers;
 
+import android.graphics.Canvas;
 import android.os.Build;
 import android.view.SurfaceHolder;
 
@@ -19,7 +20,7 @@ import androidx.annotation.RequiresApi;
  * *************************************************************
  */
 
-public class MainThread extends Thread {
+public class GameThread extends Thread {
 
 //Vars that we need for our thread
     /**
@@ -29,7 +30,7 @@ public class MainThread extends Thread {
      * and our drawing object are going to have sprites.
      */
     private int FPS = 30;
-    private boolean running;
+    private volatile boolean running;
 
     /**
      * The class holds the "draw" calls. To draw something, you need 4 basic components:
@@ -46,7 +47,7 @@ public class MainThread extends Thread {
     private GamePanel gamePanel;
     private SurfaceHolder surfaceHolder;
 
-    public MainThread(SurfaceHolder surfaceHolder, GamePanel gamePanel) {
+    public GameThread(SurfaceHolder surfaceHolder, GamePanel gamePanel) {
         super();
         this.surfaceHolder = surfaceHolder;
         this.gamePanel = gamePanel;
@@ -82,7 +83,7 @@ public class MainThread extends Thread {
             /**
              *At first our canvas is blank...
              */
-            GamePanel.canvas = null;
+            Canvas canvas = null;
             //try locking the canvas for pixel editing
             /**
              * we need to use the canvas to paint our object on our screen every frame
@@ -91,7 +92,7 @@ public class MainThread extends Thread {
 
             try {
                 //we lock canvas to our content view
-                GamePanel.canvas = this.surfaceHolder.lockCanvas();
+                canvas = this.surfaceHolder.lockCanvas();
 
                 /**
                  * and we want to be synchronized every time we update or draw
@@ -110,15 +111,15 @@ public class MainThread extends Thread {
                      * When this method is called repeatedly it gives you
                      * the perception of a MOVIE or of an animation.
                      **/
-                    this.gamePanel.draw(GamePanel.canvas);
+                    this.gamePanel.draw(canvas);
                 }//end synchronized
 
             } catch (Exception e) {
             }//end try
             finally {
-                if (GamePanel.canvas != null) {
+                if (canvas != null) {
                     try {
-                        surfaceHolder.unlockCanvasAndPost(GamePanel.canvas);
+                        surfaceHolder.unlockCanvasAndPost(canvas);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

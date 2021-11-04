@@ -34,9 +34,14 @@ import android.view.SurfaceView;
 import androidx.annotation.RequiresApi;
 import androidx.core.view.GestureDetectorCompat;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, GestureDetector.OnGestureListener,
+public class GamePanel extends SurfaceView
+        implements
+        SurfaceHolder.Callback,
+        GestureDetector.OnGestureListener,
         GestureDetector.OnDoubleTapListener {
 
     /**
@@ -48,11 +53,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
     public static int HEIGHT;
 
     // start of the game flag
-    public static boolean isPlaying;
-
-    // canvas of the game, we draw our pictures on this CANVAS
-    public static Canvas canvas;
-
+    boolean isPlaying;
 
     // the background of our game
     Background background, background1, background2;
@@ -69,11 +70,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
     Obstacle obstacle;
     Obstacle2 obstacle2;
 
-
-
     // enum for girl walking direction
     WalkingDirection girlWalkingDirection1;
 
+    List<GameObject> animatedObjects = new ArrayList<>();
 
     // TODO for later use for game score
     private int score;
@@ -118,7 +118,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
      * on gamePanel methods, by that it updates all game objects parameters (and more things
      * that are periodically) and the draw method which refreshes the screen
      */
-    private MainThread thread;
+    private GameThread gameThread;
     /**
      * ******************************************************************
      */
@@ -153,7 +153,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
     public GamePanel(Context context, int WIDTH, int HEIGHT) {
 
         /**
-         // context we receive from our activity,
+         context we receive from our activity,
          by the COMMAND:
          setContentView(new GamePanel(this, WIDTH, HEIGHT)) - see the MainActivity code;
          context - is the context (HEKSHER in hebrew) of our activity
@@ -163,9 +163,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         super(context);
 
         // of phone's dimensions
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
-
+        GamePanel.WIDTH = WIDTH;
+        GamePanel.HEIGHT = HEIGHT;
 
         /**
          * set the drawing scaled to the screen size WIDTH & HEIGHT, using the defaults
@@ -183,9 +182,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
         // create GameLogic OBJECT
         gameLogic = new GameLogic(this);
-        // create thread OBJECT
-        thread = new MainThread(getHolder(), this);
 
+        // create thread OBJECT
+        gameThread = new GameThread(getHolder(), this);
 
         /** set sounds
          * the methods of sound is depended on the version of the SDK we use
@@ -220,7 +219,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
 
     }//end of  constructor
 
-
     /**
      * This method tells us that the surface is READY,
      * so we can put object and draw them on it !
@@ -235,15 +233,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         gameStartMessage.setX((Constants.ORIGINAL_SCREEN_WIDTH / 2) - (gameStartMessage.getWidth() / 2));
         gameStartMessage.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 2) - (gameStartMessage.getHeight() / 2));
 
+
         // background of the game, some background picture
         background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background),
                 1, 1);
         background1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background),
                 1, 1);
+        animatedObjects.add(background1);
+
         // background of the game, some background picture
         background2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background),
                 1, 1);
         background2.setY(-background2.height);
+        animatedObjects.add(background2);
+
 
         // set message banner - for application use, this object is animated object
         animatedBanner = new AnimatedBanner(BitmapFactory.decodeResource(getResources(), R.drawable.animated_banner),
@@ -256,6 +259,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         animatedBanner.setShow(false);
         animatedBanner.getAnimation().setPlayedOnce(false);
         animatedBanner.getAnimation().setDelay(150);
+        animatedObjects.add(animatedBanner);
 
 
         /**
@@ -272,38 +276,48 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         boy1.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
         boy1.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 5));
         boy1.getAnimation().setDelay(200);
+        animatedObjects.add(boy1);
+
 
         // create girl object
-        girl1 = new Girl(BitmapFactory.decodeResource(getResources(), R.drawable.gril_running)
-                , 6, 6);
+        girl1 = new Girl(BitmapFactory.decodeResource(getResources(), R.drawable.gril_running),
+                6, 6);
         girl1.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
         girl1.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 4));
         girl1.setGirlWalkingDirection(WalkingDirection.RIGHT);
         girlWalkingDirection1 = girl1.getGirlWalkingDirection();
+        animatedObjects.add(girl1);
+
 
         // create girl jumping object
 
 
         // create obsti object
-        obstacle = new Obstacle(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle)
-                , 1, 1);
+        obstacle = new Obstacle(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle),
+                1, 1);
         obstacle.setHeight(100);
         obstacle.setWidth(100);
         obstacle.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
         obstacle.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2);
+        animatedObjects.add(obstacle);
 
-        obstacle2 = new Obstacle2(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle2)
-                , 1, 1);
+
+        obstacle2 = new Obstacle2(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle2),
+                1, 1);
         obstacle2.setHeight(100);
         obstacle2.setWidth(100);
         obstacle2.setX(Constants.ORIGINAL_SCREEN_WIDTH / 5);
         obstacle2.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 6);
+        animatedObjects.add(obstacle2);
+
+
         // play game start sound
         playStartSound();
 
+
         // start the game loop thread
-        thread.setRunning(true);
-        thread.start();
+        gameThread.setRunning(true);
+        gameThread.start();
     }
 
     /**
@@ -328,16 +342,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
          */
         while (retry) {
             try {
-                thread.setRunning(false);
+                gameThread.setRunning(false);
                 /**
-                 *What is a join thread..?
+                 *Wait for thread to die
                  */
-                thread.join();
+                gameThread.join();
+
+                // thread died, we can break
+                break;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }//end while
-
     }
 
     /**
@@ -391,31 +407,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         if (isPlaying) {
             // TODO to be implemented later - background music of our game
 
-            /**
-             We need to update the two dices rolling for moving it on screen, and animating it
-             */
-            animatedBanner.update();
-
-            boy1.update();
-            girl1.update();
-
-
-            obstacle.update();
-            obstacle2.update();
-
-
-            background1.update();
-            background2.update();
+            for (GameObject gameObject : animatedObjects) {
+                gameObject.update();
+            }
 
             if (gameLogic.isCollisionDetected(boy1, girl1)) {
                 girl1.flipImage(true, false);
                 gameLogic.changeDirection();
-
             }
-
         }
     }//end update
-
 
     /**
      * GamePanel cooperates with our thread
@@ -452,10 +453,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
                  */
                 canvas.scale(scaleFactorX * scaleFactorXMul, scaleFactorY * scaleFactorYMul);
 
-                // draw the background
+                // draw the static background (TODO: fix)
                 background.draw(canvas);
-                background1.draw(canvas);
-                background2.draw(canvas);
 
                 // check if we have to show message banner of any kind of game state
                 switch (gameState) {
@@ -470,28 +469,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
                     default:
                 }
 
-                animatedBanner.draw(canvas);
-
-                boy1.draw(canvas);
-                girl1.draw(canvas);
-
-
-
-                obstacle.draw(canvas);
-                obstacle2.draw(canvas);
-
+                for (GameObject gameObject : animatedObjects) {
+                    gameObject.draw(canvas);
+                }
             }
             // game not stared, so show game start message
             else {
-
                 // set background color
                 canvas.drawColor(Color.argb(50, 0, 102, 102));
                 canvas.scale(scaleFactorX * scaleFactorXMul, scaleFactorY * scaleFactorYMul);
+
                 // set game start message on middle of x coordinate of the screen
                 gameStartMessage.setX((Constants.ORIGINAL_SCREEN_WIDTH / 2) - (gameStartMessage.getWidth() / 2));
                 gameStartMessage.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 2) - (gameStartMessage.getHeight() / 2));
                 gameStartMessage.draw(canvas);
             }
+
             // restore the saves canvas state back
             canvas.restoreToCount(savedState);
         }
@@ -627,7 +620,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         boy1.flipImage(false, true);
         // boy1.rotateImage(75);
 
-
         return true;
     }
 
@@ -661,7 +653,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback, Ge
         // boy1.flipImage(true, false);
         boy1.rotate();
     }
-
 
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {

@@ -1,17 +1,19 @@
 package com.mmmfingers;
 
+import android.graphics.Canvas;
 import android.graphics.Rect;
 
 /**
  * Created by Eli Guriel on 20,September,2018.
  * Updated on 09/11/2020.
+ *
  * @author Ori Sinvani.
  * @version version 2.00
  * @since version 2.00
-
+ * <p>
  * Study Android,
  * Modi-in, YACHAD high-school.
- *
+ * <p>
  * *****************************************************************
  * Class description:
  * This is the main image object
@@ -73,5 +75,8 @@ public abstract class GameObject {
         this.height = height;
     }
 
+    public abstract void update();
+
+    public abstract void draw(Canvas canvas);
 
 }//end of class

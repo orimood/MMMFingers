@@ -21,7 +21,7 @@ public class Background extends AnimatedSpritesObject {
 
     @Override
     public void update() {
-        y = y + 4;
+        y = y + 10;
         if (y >= height)
             y = -height;
     }
