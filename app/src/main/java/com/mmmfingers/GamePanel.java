@@ -434,17 +434,17 @@ public class GamePanel extends SurfaceView
         if (isPlaying) {
             // TODO to be implemented later - background music of our game
 
-// TODO: 11/10/2021 fix objects? 
+// TODO: 11/10/2021 fix objects?
             for (GameObject gameObject : animatedObjects) {
                 gameObject.update();
             }
-
+/**
             obstacle21.update();
             obstacle22.update();
             obstacle23.update();
             obstacle24.update();
             obstacle25.update();
-
+*/
            if (gameLogic.isCollisionDetected(boy1, girl1)) {
                 girl1.flipImage(true, false);
                 gameLogic.changeDirection();
@@ -508,13 +508,14 @@ public class GamePanel extends SurfaceView
                     gameObject.draw(canvas);
                 }
 
-// TODO: 11/10/2021 fix the objects 
+// TODO: 11/10/2021 fix the objects
+                /**
                 obstacle21.draw(canvas);
                 obstacle22.draw(canvas);
                 obstacle23.draw(canvas);
                 obstacle24.draw(canvas);
                 obstacle25.draw(canvas);
-
+*/
             }
             // game not stared, so show game start message
             else {
