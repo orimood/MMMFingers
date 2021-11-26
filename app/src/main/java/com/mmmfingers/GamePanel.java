@@ -68,7 +68,7 @@ public class GamePanel extends SurfaceView
     Boy boy1;
     Girl girl1;
     Obstacle obstacle;
-    Obstacle2 obstacle21, obstacle22, obstacle23, obstacle24, obstacle25;
+    Obstacle2 obstacle2[] = new Obstacle2[6];
 
     // enum for girl walking direction
     WalkingDirection girlWalkingDirection1;
@@ -301,42 +301,13 @@ public class GamePanel extends SurfaceView
         obstacle.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2);
         animatedObjects.add(obstacle);
 
-
-        obstacle21 = new Obstacle2(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle2),
-                1, 1);
-        obstacle21.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        obstacle21.setY(-2000);
-        animatedObjects.add(obstacle21);
-
-        obstacle22 = new Obstacle2(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle2),
-                1, 1);
-        obstacle22.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        obstacle22.setY(-1600);
-        animatedObjects.add(obstacle22);
-
-        obstacle23 = new Obstacle2(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle2),
-                1, 1);
-        obstacle23.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        obstacle23.setY(-1200);
-        animatedObjects.add(obstacle23);
-
-        obstacle24 = new Obstacle2(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle2),
-                1, 1);
-        obstacle24.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        obstacle24.setY(-800);
-        animatedObjects.add(obstacle24);
-
-        obstacle21 = new Obstacle2(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle2),
-                1, 1);
-        obstacle21.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        obstacle21.setY(-400);
-        animatedObjects.add(obstacle24);
-
-        obstacle25 = new Obstacle2(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle2),
-                1, 1);
-        obstacle25.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        obstacle25.setY(0);
-        animatedObjects.add(obstacle25);
+        for (int i = 0; i < obstacle2.length; i++) {
+            int rotateAngel = rnd.nextInt(10) + 3;
+            int distance = GamePanel.HEIGHT / (obstacle2.length - 1);
+            obstacle2[i] = new Obstacle2(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle2),
+                    1, 1, i * -distance, rotateAngel, distance);
+            animatedObjects.add(obstacle2[i]);
+        }
 
         // play game start sound
         playStartSound();
@@ -439,13 +410,13 @@ public class GamePanel extends SurfaceView
                 gameObject.update();
             }
 /**
-            obstacle21.update();
-            obstacle22.update();
-            obstacle23.update();
-            obstacle24.update();
-            obstacle25.update();
-*/
-           if (gameLogic.isCollisionDetected(boy1, girl1)) {
+ obstacle21.update();
+ obstacle22.update();
+ obstacle23.update();
+ obstacle24.update();
+ obstacle25.update();
+ */
+            if (gameLogic.isCollisionDetected(boy1, girl1)) {
                 girl1.flipImage(true, false);
                 gameLogic.changeDirection();
             }
@@ -510,12 +481,12 @@ public class GamePanel extends SurfaceView
 
 // TODO: 11/10/2021 fix the objects
                 /**
-                obstacle21.draw(canvas);
-                obstacle22.draw(canvas);
-                obstacle23.draw(canvas);
-                obstacle24.draw(canvas);
-                obstacle25.draw(canvas);
-*/
+                 obstacle21.draw(canvas);
+                 obstacle22.draw(canvas);
+                 obstacle23.draw(canvas);
+                 obstacle24.draw(canvas);
+                 obstacle25.draw(canvas);
+                 */
             }
             // game not stared, so show game start message
             else {

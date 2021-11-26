@@ -14,7 +14,7 @@ import android.graphics.Rect;
  * Study Android,
  * Modi-in, YACHAD high-school.
  * <p>
- * *****************************************************************
+ * ***************************************3**************************
  * Class description:
  * This is the main image object
  * it is abstract, that mean, it is telling has what to do
