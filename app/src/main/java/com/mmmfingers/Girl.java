@@ -18,7 +18,7 @@ public class Girl extends AnimatedSpritesObject {
     public Girl(Bitmap imageThatHasSprites, int numberOfSprites, int rowLength) {
         super(imageThatHasSprites, numberOfSprites, rowLength);
     }
-
+/*
     @Override
     protected void doAnimate() {
         // here is our code
@@ -33,7 +33,7 @@ public class Girl extends AnimatedSpritesObject {
                 x = GamePanel.WIDTH + width;
             }
         }
-    }
+    }*/
 
     public WalkingDirection getGirlWalkingDirection() {
         return girlWalkingDirection;

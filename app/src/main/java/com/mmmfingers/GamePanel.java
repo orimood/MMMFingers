@@ -1,48 +1,23 @@
 package com.mmmfingers;
 
-/**
- * @author Ori Sinvani.
- * @version version 2.00
- * @since version 2.00
- * Study Android,
- * Modi'in, Yachad high-school.
- * <p>
- * *************************************************************
- * Class description:
- * <p>
- * This is the main class of our game,
- * it uses the SurfaceView class to implement screen management and touch
- * for our game, all the UI is here
- * *************************************************************
- */
-
-
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.Build;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
 import androidx.annotation.RequiresApi;
-import androidx.core.view.GestureDetectorCompat;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class GamePanel extends SurfaceView
         implements
-        SurfaceHolder.Callback,
-        GestureDetector.OnGestureListener,
-        GestureDetector.OnDoubleTapListener {
+        SurfaceHolder.Callback{
 
     /**
      * Now we will set our game screen width and height
@@ -58,20 +33,10 @@ public class GamePanel extends SurfaceView
     // the background of our game
     Background background, background1, background2;
 
-    // game start message
-    GameStartMessage gameStartMessage;
-
-    // the animated message banner image
-    AnimatedBanner animatedBanner;
-
-    // init game objects - a boy and a girl
-    Boy boy1;
     Girl girl1;
-    Obstacle obstacle;
-    Obstacle2 obstacle2[] = new Obstacle2[6];
+    Square obstacle;
+    Teeth obstacle2[] = new Teeth[6];
 
-    // enum for girl walking direction
-    WalkingDirection girlWalkingDirection1;
 
     List<GameObject> animatedObjects = new ArrayList<>();
 
@@ -81,20 +46,6 @@ public class GamePanel extends SurfaceView
     //the random class
     private Random rnd = new Random();
 
-    // sounds declaration section
-    SoundPool applauseSound;
-    int applauseSoundID;
-    SoundPool pieceMoveSound;
-    int pieceMoveSoundID;
-    SoundPool twoDiceSound;
-    int twoDiceSoundID;
-    SoundPool startSound;
-    int startSoundID;
-    SoundPool openBannerSound;
-    int openBannerSoundID;
-
-
-    private GestureDetectorCompat gestureDetector;
 
 
     // TODO LATER - saved for later use Game Ending Picture
@@ -177,8 +128,7 @@ public class GamePanel extends SurfaceView
         scaleFactorYMul = 1.0f + ((HEIGHT - Constants.ORIGINAL_SCREEN_HEIGHT) * 1.0f / Constants.ORIGINAL_SCREEN_HEIGHT);
 
         // gesture-s
-        this.gestureDetector = new GestureDetectorCompat(this.getContext(), this);
-        gestureDetector.setOnDoubleTapListener(this);
+
 
         // create GameLogic OBJECT
         gameLogic = new GameLogic(this);
@@ -186,28 +136,7 @@ public class GamePanel extends SurfaceView
         // create thread OBJECT
         gameThread = new GameThread(getHolder(), this);
 
-        /** set sounds
-         * the methods of sound is depended on the version of the SDK we use
-         */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            startSound = new SoundPool.Builder()
-                    .setMaxStreams(10)
-                    .build();
-        } else {
-            startSound = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
-        }
-        startSoundID = startSound.load(context, R.raw.start_sound, 1);
 
-        /**
-         * These (callback and focusable) are layers of android construction buildings,
-         * we need them for SurfaceHolder class
-         * of android (SurfaceHolder is a class which inherent the View class android and add
-         * more capabilities.
-         *
-         Callback is used for the surfaceHolder to intercept events:
-         Surface objects enable apps to render images to be presented on screens.
-         SurfaceHolder interfaces enable apps to edit and control surfaces.
-         */
         getHolder().addCallback(this);
 
         /**
@@ -226,12 +155,7 @@ public class GamePanel extends SurfaceView
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
 
-        // game start message
-        gameStartMessage = new GameStartMessage(BitmapFactory.decodeResource(getResources(), R.drawable.welcome_message),
-                1, 1);
-        // set on middle of x and y coordinates of the screen
-        gameStartMessage.setX((Constants.ORIGINAL_SCREEN_WIDTH / 2) - (gameStartMessage.getWidth() / 2));
-        gameStartMessage.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 2) - (gameStartMessage.getHeight() / 2));
+
 
 
         // background of the game, some background picture
@@ -248,18 +172,6 @@ public class GamePanel extends SurfaceView
         animatedObjects.add(background2);
 
 
-        // set message banner - for application use, this object is animated object
-        animatedBanner = new AnimatedBanner(BitmapFactory.decodeResource(getResources(), R.drawable.animated_banner),
-                8, 8);
-        // set on middle of x coordinate of the screen
-        animatedBanner.setX((Constants.ORIGINAL_SCREEN_WIDTH / 2) - (animatedBanner.getWidth() / 2));
-        // set on middle of y coordinate of the screen
-        animatedBanner.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 2) - (animatedBanner.getHeight() / 2));
-        // set show of the image off - don't show it
-        animatedBanner.setShow(false);
-        animatedBanner.getAnimation().setPlayedOnce(false);
-        animatedBanner.getAnimation().setDelay(150);
-        animatedObjects.add(animatedBanner);
 
 
         /**
@@ -269,14 +181,6 @@ public class GamePanel extends SurfaceView
          * numberOfSprites
          * and, rowLength
          */
-        // create boy object
-        boy1 = new Boy(BitmapFactory.decodeResource(getResources(), R.drawable.jumping_boy),
-                6, 6);
-        // set positions
-        boy1.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        boy1.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 5));
-        boy1.getAnimation().setDelay(200);
-        animatedObjects.add(boy1);
 
 
         // create girl object
@@ -285,7 +189,6 @@ public class GamePanel extends SurfaceView
         girl1.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
         girl1.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 4));
         girl1.setGirlWalkingDirection(WalkingDirection.RIGHT);
-        girlWalkingDirection1 = girl1.getGirlWalkingDirection();
         animatedObjects.add(girl1);
 
 
@@ -293,8 +196,8 @@ public class GamePanel extends SurfaceView
 
 
         // create obsti object
-        obstacle = new Obstacle(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle),
-                1, 1);
+        obstacle = new Square(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle),
+                1, 1, 3);
         obstacle.setHeight(100);
         obstacle.setWidth(100);
         obstacle.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
@@ -304,13 +207,13 @@ public class GamePanel extends SurfaceView
         for (int i = 0; i < obstacle2.length; i++) {
             int rotateAngel = rnd.nextInt(10) + 3;
             int distance = GamePanel.HEIGHT / (obstacle2.length - 1);
-            obstacle2[i] = new Obstacle2(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle2),
-                    1, 1, i * -distance, rotateAngel, distance);
+            obstacle2[i] = new Teeth(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle_sprite1),
+                    15, 15, i * -distance, rotateAngel, distance);
             animatedObjects.add(obstacle2[i]);
         }
 
         // play game start sound
-        playStartSound();
+
 
 
         // start the game loop thread
@@ -364,8 +267,7 @@ public class GamePanel extends SurfaceView
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        // gestures events
-        this.gestureDetector.onTouchEvent(event);
+
 
         int action = event.getAction();
         int xPosition, yPosition;
@@ -416,10 +318,7 @@ public class GamePanel extends SurfaceView
  obstacle24.update();
  obstacle25.update();
  */
-            if (gameLogic.isCollisionDetected(boy1, girl1)) {
-                girl1.flipImage(true, false);
-                gameLogic.changeDirection();
-            }
+
         }
     }//end update
 
@@ -495,9 +394,7 @@ public class GamePanel extends SurfaceView
                 canvas.scale(scaleFactorX * scaleFactorXMul, scaleFactorY * scaleFactorYMul);
 
                 // set game start message on middle of x coordinate of the screen
-                gameStartMessage.setX((Constants.ORIGINAL_SCREEN_WIDTH / 2) - (gameStartMessage.getWidth() / 2));
-                gameStartMessage.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 2) - (gameStartMessage.getHeight() / 2));
-                gameStartMessage.draw(canvas);
+
             }
 
             // restore the saves canvas state back
@@ -519,35 +416,12 @@ public class GamePanel extends SurfaceView
         // set text to Bold
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
         // write in the message
-        canvas.drawText(message, WIDTH / 2 - (animatedBanner.getWidth() / 2) + 50,
-                (HEIGHT / 2) - 30, paint);
+
     }// end drawText
 
     /**
      * Sounds
      */
-    public void playSoundPieceMove() {
-        pieceMoveSound.play(pieceMoveSoundID, 0.5f, 0.5f, 1, 0, 1);
-    }
-
-    public void playSoundApplause() {
-        applauseSound.play(applauseSoundID, 0.2f, 0.2f, 1, 0, 1);
-    }
-
-    // TODO 3, add sounds
-    public void playDiceRollingSound() {
-        twoDiceSound.play(twoDiceSoundID, 1.0f, 1.0f, 1, 0, 1);
-    }
-
-    // TODO 3, add sounds
-    public void playStartSound() {
-        startSound.play(startSoundID, 0.4f, 0.4f, 1, 0, 1);
-    }
-
-    // TODO 4, add sounds
-    public void playOpenBannerSound() {
-        openBannerSound.play(openBannerSoundID, 0.5f, 0.5f, 1, 0, 1);
-    }
 
     /**
      * setter and Getters **********************************************************
@@ -583,21 +457,7 @@ public class GamePanel extends SurfaceView
     }
 
 
-    public AnimatedBanner getMessageBanner() {
-        return animatedBanner;
-    }
 
-    public void setMessageBanner(AnimatedBanner messageBanner) {
-        this.animatedBanner = messageBanner;
-    }
-
-    public Boy getBoy1() {
-        return boy1;
-    }
-
-    public void setBoy1(Boy boy1) {
-        this.boy1 = boy1;
-    }
 
     public Girl getGirl1() {
         return girl1;
@@ -607,13 +467,7 @@ public class GamePanel extends SurfaceView
         this.girl1 = girl1;
     }
 
-    public WalkingDirection getGirlWalkingDirection1() {
-        return girlWalkingDirection1;
-    }
 
-    public void setGirlWalkingDirection1(WalkingDirection girlWalkingDirection1) {
-        this.girlWalkingDirection1 = girlWalkingDirection1;
-    }
 
     /**
      * Gesture methods
@@ -622,55 +476,9 @@ public class GamePanel extends SurfaceView
      * @return
      */
 
-    @Override
-    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-        return false;
-    }
 
-    @Override
-    public boolean onDoubleTap(MotionEvent motionEvent) {
-        //   girl1.rotateImage(75);
-        girl1.flipImage(true, false);
-        gameLogic.changeDirection();
-        boy1.flipImage(false, true);
-        // boy1.rotateImage(75);
 
-        return true;
-    }
 
-    @Override
-    public boolean onDoubleTapEvent(MotionEvent motionEvent) {
-        return true;
-    }
 
-    @Override
-    public boolean onDown(MotionEvent motionEvent) {
-        return false;
-    }
 
-    @Override
-    public void onShowPress(MotionEvent motionEvent) {
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent motionEvent) {
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent motionEvent) {
-        // boy1.flipImage(true, false);
-        boy1.rotate();
-    }
-
-    @Override
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return false;
-    }
 }//end of class

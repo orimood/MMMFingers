@@ -62,16 +62,7 @@ public class GameLogic {
         }
     }
 
-    public void changeDirection() {
-        if (gamePanel.getGirlWalkingDirection1() == WalkingDirection.RIGHT) {
-            gamePanel.getGirl1().setGirlWalkingDirection(WalkingDirection.LEFT);
-            gamePanel.setGirlWalkingDirection1(WalkingDirection.LEFT);
-        }
-        else {
-            gamePanel.getGirl1().setGirlWalkingDirection(WalkingDirection.RIGHT);
-            gamePanel.setGirlWalkingDirection1(WalkingDirection.RIGHT);
-        }
-     }
+
 
 
 

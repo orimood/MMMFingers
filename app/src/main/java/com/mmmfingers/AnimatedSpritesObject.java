@@ -98,67 +98,20 @@ public class AnimatedSpritesObject extends GameObject {
 
 
     // update method
+
+
+    @Override
     public void update() {
-        long newUpdateTime = System.nanoTime();
-        // here is the timer of our player millis
-        long elapsed = (newUpdateTime - lastUpdateTime) / 1000000;
 
-        // Now when our timer gets past xxx millis we want the to do something
-        if (elapsed >= 40) {
-            // here is our code
-            doAnimate();
-
-            lastUpdateTime = newUpdateTime;
-        }
-
-        // update the animation
-        animation.update();
-    }//end update
-
-    protected void doAnimate() {
-        // by default do nothing
     }
 
     /**
      * draw our object on the canvas (screen)
      */
     public void draw(Canvas canvas) {
-        if (show) {
-            Matrix matrix = new Matrix();
-            Bitmap image = animation.getImage();
-
-            // rotate
-            matrix.postTranslate(-image.getWidth() / 2.0f, -image.getHeight() / 2.0f);
-            matrix.postRotate(rotationAngle);
-            matrix.postTranslate(image.getWidth() / 2.0f, image.getHeight() / 2.0f);
-
-            // placement
-            matrix.postTranslate(x, y);
-
-            canvas.drawBitmap(animation.getImage(), matrix, null);
-        }
+        if(show) { canvas.drawBitmap(animation.getImage(), x, y, null); }
     }//end draw
 
-
-    // this will flip the image - horizontally if True, Vertically if False
-    public void flipImage(boolean horizontally, boolean vertically) {
-        Bitmap[] bOutput = new Bitmap[spritesArray.length];
-        Matrix matrix = new Matrix();
-
-        if (horizontally)
-            matrix.postScale(-1f, 1f);
-        else
-            matrix.postScale(1f, -1f);
-
-        for (int i = 0; i < spritesArray.length; i++) {
-            Log.e("gureli", "flipImage 1: " + width + ":" + height);
-            Log.e("gureli", "flipImage 2: " + spritesArray[i].getWidth() + ":" + spritesArray[i].getHeight());
-            bOutput[i] = Bitmap.createBitmap(spritesArray[i], 0, 0, spritesArray[i].getWidth(),
-                    spritesArray[i].getHeight(), matrix, true);
-        }
-        spritesArray = bOutput;
-        animation.setSprites(spritesArray);
-    }
 
     /**
      * this will rotate the image clockwise, by "angle"
@@ -169,10 +122,6 @@ public class AnimatedSpritesObject extends GameObject {
      *
      * @param angle
      */
-    public void rotateImage(float angle) {
-        rotationAngle = (rotationAngle + angle) % 360.0f;
-    }
-
 
     /**
      * Setters and Getters *******************************************************************
