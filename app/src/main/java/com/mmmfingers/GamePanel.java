@@ -10,6 +10,8 @@ import android.os.Build;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
+
 import androidx.annotation.RequiresApi;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,16 +32,21 @@ public class GamePanel extends SurfaceView
     // start of the game flag
     boolean isPlaying;
 
+
     // the background of our game
     Background background, background1, background2;
 
     Girl girl1;
-    Square obstacle;
+    Square square;
+    Square square2;
     Teeth obstacle2[] = new Teeth[6];
 
 
     List<GameObject> animatedObjects = new ArrayList<>();
 
+    int groupx = 100;
+
+    List<GameObject> groupobst = new ArrayList<>();
     // TODO for later use for game score
     private int score;
 
@@ -195,14 +202,22 @@ public class GamePanel extends SurfaceView
         // create girl jumping object
 
 
-        // create obsti object
-        obstacle = new Square(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle),
+        // create obsti objectR.drawable.obstacle
+        square = new Square(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle),
+                 1, 1, 3);
+        square.setHeight(100);
+        square.setWidth(100);
+        square.setX(groupx);
+        square.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2);
+        groupobst.add(square);
+
+        square2 = new Square(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle),
                 1, 1, 3);
-        obstacle.setHeight(100);
-        obstacle.setWidth(100);
-        obstacle.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        obstacle.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2);
-        animatedObjects.add(obstacle);
+        square2.setHeight(100);
+        square2.setWidth(100);
+        square2.setX(groupx+ 500);
+        square2.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2);
+        groupobst.add(square2);
 
         for (int i = 0; i < obstacle2.length; i++) {
             int rotateAngel = rnd.nextInt(10) + 3;
@@ -311,6 +326,9 @@ public class GamePanel extends SurfaceView
             for (GameObject gameObject : animatedObjects) {
                 gameObject.update();
             }
+            for (GameObject gameObject : groupobst) {
+                gameObject.update();
+            }
 /**
  obstacle21.update();
  obstacle22.update();
@@ -377,6 +395,10 @@ public class GamePanel extends SurfaceView
                 for (GameObject gameObject : animatedObjects) {
                     gameObject.draw(canvas);
                 }
+                for (GameObject gameObject : groupobst) {
+                    gameObject.draw(canvas);
+                }
+                square.rotateImage(3);
 
 // TODO: 11/10/2021 fix the objects
                 /**
