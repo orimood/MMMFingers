@@ -25,7 +25,7 @@ class Teeth extends AnimatedSpritesObject {
     public void update() {
 
         /*long newUpdateTime = System.nanoTime();
-        // here is the timer of our player millis
+        // here is the timer of our Player millis
         long elapsed = (newUpdateTime - lastUpdateTime) / 1000000;
 
         // Now when our timer gets past xxx millis we want the to do something

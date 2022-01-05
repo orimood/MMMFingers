@@ -10,7 +10,6 @@ import android.os.Build;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class GamePanel extends SurfaceView
     // the background of our game
     Background background, background1, background2;
 
-    Girl girl1;
+    Player player;
     Square square;
     Square square2;
     Teeth obstacle2[] = new Teeth[6];
@@ -191,19 +190,19 @@ public class GamePanel extends SurfaceView
 
 
         // create girl object
-        girl1 = new Girl(BitmapFactory.decodeResource(getResources(), R.drawable.gril_running),
-                6, 6);
-        girl1.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        girl1.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 4));
-        girl1.setGirlWalkingDirection(WalkingDirection.RIGHT);
-        animatedObjects.add(girl1);
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player),
+                1, 1);
+        player.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
+        player.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 4));
+        player.setGirlWalkingDirection(WalkingDirection.RIGHT);
+        animatedObjects.add(player);
 
 
         // create girl jumping object
 
 
         // create obsti objectR.drawable.obstacle
-        square = new Square(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle),
+        square = new Square(BitmapFactory.decodeResource(getResources(), R.drawable.square),
                  1, 1, 3);
         square.setHeight(100);
         square.setWidth(100);
@@ -211,7 +210,7 @@ public class GamePanel extends SurfaceView
         square.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2);
         groupobst.add(square);
 
-        square2 = new Square(BitmapFactory.decodeResource(getResources(), R.drawable.obstacle),
+        square2 = new Square(BitmapFactory.decodeResource(getResources(), R.drawable.square),
                 1, 1, 3);
         square2.setHeight(100);
         square2.setWidth(100);
@@ -329,6 +328,7 @@ public class GamePanel extends SurfaceView
             for (GameObject gameObject : groupobst) {
                 gameObject.update();
             }
+            square2.setX(square.getX()+600);
 /**
  obstacle21.update();
  obstacle22.update();
@@ -481,12 +481,12 @@ public class GamePanel extends SurfaceView
 
 
 
-    public Girl getGirl1() {
-        return girl1;
+    public Player getGirl1() {
+        return player;
     }
 
-    public void setGirl1(Girl girl1) {
-        this.girl1 = girl1;
+    public void setplayer(Player player) {
+        this.player = player;
     }
 
 

@@ -11,11 +11,11 @@ import android.graphics.Bitmap;
  * @since version 2.00
  */
 
-public class Girl extends AnimatedSpritesObject {
+public class Player extends AnimatedSpritesObject {
 
     private WalkingDirection girlWalkingDirection;
 
-    public Girl(Bitmap imageThatHasSprites, int numberOfSprites, int rowLength) {
+    public Player(Bitmap imageThatHasSprites, int numberOfSprites, int rowLength) {
         super(imageThatHasSprites, numberOfSprites, rowLength);
     }
 /*
