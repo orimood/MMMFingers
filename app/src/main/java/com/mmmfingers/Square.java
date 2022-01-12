@@ -25,8 +25,8 @@ class Square extends AnimatedSpritesObject {
     @Override
     public void update() {
         if (y > GamePanel.HEIGHT) {
-            y = -distance;
-            x = 100;
+            y = -distance -200;
+            x = getNextX();
         }
 
         y = y + Constants.OBSTACLE_DROPPING_RATE;
@@ -52,7 +52,7 @@ class Square extends AnimatedSpritesObject {
     }
 
     private int getNextX() {
-        return rnd.nextInt(GamePanel.WIDTH) - Math.max(width, height) / 2;
+        return rnd.nextInt(200);
     }
 /*
 

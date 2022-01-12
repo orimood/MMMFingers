@@ -66,6 +66,7 @@ public class GameLogic {
 
 
 
+
     /**********************************************************************************************
      * COLLISION DETECTION METHODS
      * ********************************************************************************************
@@ -113,6 +114,18 @@ public class GameLogic {
      *
      *           Overloaded method for isCollisionDetected, with resize
      */
+
+    // collision method , near collision
+    public boolean collision(AnimatedSpritesObject obj1, int scaleW1, int scaleH1,
+                             AnimatedSpritesObject obj2, int scaleW2, int scaleH2) {
+        if (Rect.intersects(obj1.getRectangle(), obj2.getRectangle())) {
+            // if it is a near collision, then check exact collision, with resize
+            return isCollisionDetected(obj1, scaleW1, scaleH1, obj2, scaleW2, scaleH2);
+        }
+        return false;
+    }
+
+    // exact collision method, Overloaded method for isCollisionDetected, with resize
     public boolean isCollisionDetected(AnimatedSpritesObject obj1, int scaleW1, int scaleH1,
                                        AnimatedSpritesObject obj2, int scaleW2, int scaleH2) {
         Bitmap bitmap11;
@@ -165,6 +178,16 @@ public class GameLogic {
      *           Overloaded method for isCollisionDetected, without resize
      */
 
+    // collision method , near collision
+    public boolean collision(AnimatedSpritesObject obj1, AnimatedSpritesObject obj2) {
+        if (Rect.intersects(obj1.getRectangle(), obj2.getRectangle())) {
+            // if it is a near collision, then check exact collision
+            return isCollisionDetected(obj1, obj2);
+        }
+        return false;
+    }
+
+    // exact collision method
     public boolean isCollisionDetected(AnimatedSpritesObject obj1,
                                        AnimatedSpritesObject obj2) {
         Bitmap bitmap1;
@@ -200,10 +223,10 @@ public class GameLogic {
 
 
     private static Rect getCollisionBounds(Rect rect1, Rect rect2) {
-        int left = Math.max(rect1.left, rect2.left);
-        int top = Math.max(rect1.top, rect2.top);
-        int right = Math.min(rect1.right, rect2.right);
-        int bottom = Math.min(rect1.bottom, rect2.bottom);
+        int left = (int) Math.max(rect1.left, rect2.left);
+        int top = (int) Math.max(rect1.top, rect2.top);
+        int right = (int) Math.min(rect1.right, rect2.right);
+        int bottom = (int) Math.min(rect1.bottom, rect2.bottom);
         return new Rect(left, top, right, bottom);
     }
 

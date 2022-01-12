@@ -165,17 +165,17 @@ public class GamePanel extends SurfaceView
 
 
         // background of the game, some background picture
-        background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background),
+        background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background1),
                 1, 1);
-        background1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background),
+        background1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background1),
                 1, 1);
-        animatedObjects.add(background1);
+  //      animatedObjects.add(background1);
 
         // background of the game, some background picture
-        background2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background),
+        background2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background1),
                 1, 1);
         background2.setY(-background2.height);
-        animatedObjects.add(background2);
+     //   animatedObjects.add(background2);
 
 
 
@@ -195,7 +195,7 @@ public class GamePanel extends SurfaceView
         player.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
         player.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 4));
         player.setGirlWalkingDirection(WalkingDirection.RIGHT);
-        animatedObjects.add(player);
+     //   animatedObjects.add(player);
 
 
         // create girl jumping object
@@ -329,13 +329,18 @@ public class GamePanel extends SurfaceView
                 gameObject.update();
             }
             square2.setX(square.getX()+600);
-/**
- obstacle21.update();
- obstacle22.update();
- obstacle23.update();
- obstacle24.update();
- obstacle25.update();
- */
+
+            background1.update();
+            background2.update();
+            player.update();
+
+            for (GameObject gameObject : animatedObjects) {
+                if (gameLogic.collision(player,(AnimatedSpritesObject) gameObject)){
+                    score = score -1;
+                }
+            }
+
+
 
         }
     }//end update
@@ -377,6 +382,8 @@ public class GamePanel extends SurfaceView
 
                 // draw the static background (TODO: fix)
                 background.draw(canvas);
+                background1.draw(canvas);
+                background2.draw(canvas);
 
                 // check if we have to show message banner of any kind of game state
                 switch (gameState) {
@@ -399,6 +406,11 @@ public class GamePanel extends SurfaceView
                     gameObject.draw(canvas);
                 }
                 square.rotateImage(3);
+
+                player.draw(canvas);
+
+
+                showStateMessage(canvas);
 
 // TODO: 11/10/2021 fix the objects
                 /**
@@ -430,14 +442,18 @@ public class GamePanel extends SurfaceView
      * in this method we can implement different popup message by using
      * a Paint class to write something, and more...
      */
-    public void showStateMessage(Canvas canvas, String message) {
+    public void showStateMessage(Canvas canvas) {
         // and create a bitmap ref for panel image, on this panel we show a message
         Paint paint = new Paint();
-        paint.setColor(Color.RED);
-        paint.setTextSize(60);
+        paint.setColor(Color.BLUE);
+        paint.setTextSize(80);
         // set text to Bold
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
         // write in the message
+
+        canvas.drawText("" + score, 100, 100, paint);
+
+
 
     }// end drawText
 
