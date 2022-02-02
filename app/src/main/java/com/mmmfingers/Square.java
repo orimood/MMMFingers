@@ -31,6 +31,7 @@ class Square extends AnimatedSpritesObject {
 
         y = y + Constants.OBSTACLE_DROPPING_RATE;
 
+
         // update the animation
         animation.update();
         this.rotateImage(rotation);
@@ -52,7 +53,7 @@ class Square extends AnimatedSpritesObject {
     }
 
     private int getNextX() {
-        return rnd.nextInt(200);
+        return rnd.nextInt(400);
     }
 /*
 

@@ -218,6 +218,7 @@ public class GamePanel extends SurfaceView
         square2.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2);
         groupobst.add(square2);
 
+
         for (int i = 0; i < obstacle2.length; i++) {
             int rotateAngel = rnd.nextInt(10) + 3;
             int distance = GamePanel.HEIGHT / (obstacle2.length - 1);
@@ -316,6 +317,9 @@ public class GamePanel extends SurfaceView
      * GamePanel cooperates with our thread
      * So our game run a new game loop ....
      */
+
+    int movesq1 = -10;
+    int movesq2 = +10;
     public void update() {
         // if game started
         if (isPlaying) {
@@ -328,7 +332,20 @@ public class GamePanel extends SurfaceView
             for (GameObject gameObject : groupobst) {
                 gameObject.update();
             }
+
             square2.setX(square.getX()+600);
+
+            if (square.getX() < -200){
+                movesq1 = -movesq1;
+            }
+
+            if (square.getX() > 400){
+                movesq1 = -movesq1;
+            }
+
+
+            square.setX(square.getX()+movesq1);
+
 
             background1.update();
             background2.update();
@@ -339,6 +356,9 @@ public class GamePanel extends SurfaceView
                     score = score -1;
                 }
             }
+
+
+
 
 
 
@@ -413,13 +433,6 @@ public class GamePanel extends SurfaceView
                 showStateMessage(canvas);
 
 // TODO: 11/10/2021 fix the objects
-                /**
-                 obstacle21.draw(canvas);
-                 obstacle22.draw(canvas);
-                 obstacle23.draw(canvas);
-                 obstacle24.draw(canvas);
-                 obstacle25.draw(canvas);
-                 */
             }
             // game not stared, so show game start message
             else {
