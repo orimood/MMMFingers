@@ -350,6 +350,8 @@ public class GamePanel extends SurfaceView
             background1.update();
             background2.update();
             player.update();
+            square.update();
+            square2.update();
 
             for (GameObject gameObject : animatedObjects) {
                 if (gameLogic.collision(player,(AnimatedSpritesObject) gameObject)){
