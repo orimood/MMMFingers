@@ -333,6 +333,12 @@ public class GamePanel extends SurfaceView
                 gameObject.update();
             }
 
+            background1.update();
+            background2.update();
+            player.update();
+            square.update();
+            square2.update();
+
             square2.setX(square.getX()+600);
 
             if (square.getX() < -200){
@@ -343,15 +349,15 @@ public class GamePanel extends SurfaceView
                 movesq1 = -movesq1;
             }
 
-
             square.setX(square.getX()+movesq1);
 
 
-            background1.update();
-            background2.update();
-            player.update();
-            square.update();
-            square2.update();
+            if(gameLogic.collision(player, (AnimatedSpritesObject) square)){
+                score = score -1;
+            }if(gameLogic.collision(player, (AnimatedSpritesObject) square2)){
+                score = score -1;
+            }
+
 
             for (GameObject gameObject : animatedObjects) {
                 if (gameLogic.collision(player,(AnimatedSpritesObject) gameObject)){
@@ -428,6 +434,8 @@ public class GamePanel extends SurfaceView
                     gameObject.draw(canvas);
                 }
                 square.rotateImage(3);
+                square.draw(canvas);
+                square2.draw(canvas);
 
                 player.draw(canvas);
 
