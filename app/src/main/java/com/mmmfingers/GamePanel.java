@@ -203,7 +203,7 @@ public class GamePanel extends SurfaceView
 
         // create obsti objectR.drawable.obstacle
         square = new Square(BitmapFactory.decodeResource(getResources(), R.drawable.square),
-                 1, 1, 3);
+                 1, 1);
         square.setHeight(100);
         square.setWidth(100);
         square.setX(groupx);
@@ -211,7 +211,7 @@ public class GamePanel extends SurfaceView
         groupobst.add(square);
 
         square2 = new Square(BitmapFactory.decodeResource(getResources(), R.drawable.square),
-                1, 1, 3);
+                1, 1);
         square2.setHeight(100);
         square2.setWidth(100);
         square2.setX(groupx+ 500);
@@ -433,7 +433,7 @@ public class GamePanel extends SurfaceView
                 for (GameObject gameObject : groupobst) {
                     gameObject.draw(canvas);
                 }
-                square.rotateImage(3);
+
                 square.draw(canvas);
                 square2.draw(canvas);
 

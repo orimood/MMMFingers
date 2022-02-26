@@ -90,7 +90,7 @@ public class AnimatedSpritesObject extends GameObject {
         // pass the sprites array
         animation.setSprites(spritesArray);
         saveSpritesArray = spritesArray;
-        animation.setDelay(100);
+        animation.setDelay(200);
 
         //Now we initiate the timer so we can use in the update method
         lastUpdateTime = System.nanoTime();

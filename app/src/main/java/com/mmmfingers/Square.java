@@ -9,13 +9,12 @@ import java.util.Random;
 class Square extends AnimatedSpritesObject {
 
 
-    private int rotation;
+
     private Random rnd = new Random();
     private int distance;
 
-    public Square(Bitmap imageThatHasSprites, int numberOfSprites, int rowLength, int rotation) {
+    public Square(Bitmap imageThatHasSprites, int numberOfSprites, int rowLength) {
         super(imageThatHasSprites, numberOfSprites, rowLength);
-        this.rotation = rotation;
         this.distance = distance;
 
         this.x = getNextX();
@@ -34,23 +33,9 @@ class Square extends AnimatedSpritesObject {
 
         // update the animation
         animation.update();
-        this.rotateImage(rotation);
-    }
-
-
-        public void rotateImage(float angle) {
-        Matrix matrix = new Matrix();
-        Bitmap image = animation.getImage();
-
-        // rotate
-        matrix.postTranslate(-this.getWidth() / 2.0f, -this.getHeight() / 2.0f);
-        matrix.postRotate(angle % 360.0f);
-        matrix.postTranslate(this.getWidth() / 2.0f, image.getHeight() / 2.0f);
-
-        // placement
-        matrix.postTranslate(x, y);
 
     }
+
 
     private int getNextX() {
         return rnd.nextInt(400);
