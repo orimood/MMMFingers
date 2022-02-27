@@ -1,9 +1,12 @@
 package com.mmmfingers;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 
 import java.util.Random;
 
@@ -13,7 +16,7 @@ import java.util.Random;
  * @since version 2.00
  * Study Android,
  * Modi'in, Yachad high-school.
- *
+ * <p>
  * * *****************************************************************
  * * Class description:
  * * this class GameLogic class, all the logic of the game, the game rules and BRAIN
@@ -23,50 +26,63 @@ import java.util.Random;
 
 public class GameLogic {
 
+
     /**
-     * this pointer will point to our gamePanel
-     * so we can address it and other game object from this class
+     * This (ENUM CLASS) will help us navigate in our game states
+     * // current game state - start of the game MESSAGE SHOWN
      */
-    private GamePanel gamePanel;
+    private GameState gameState = GameState.GAME_START_STATE;
 
     // random for dices roll results
     Random random = new Random();
 
-    // random number we get 1..6
-    int randomNumber;
+    private int score;
 
     /**
      * Constructor
      */
-    public GameLogic(GamePanel gamePanel) {
-        // here we point to gamePanel object
-        this.gamePanel = gamePanel;
+    public GameLogic() {
+
+    }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public void incScore(int diff) {
+        score += diff;
+    }
+
+    public void decScore(int diff) {
+        score -= diff;
+    }
+
+    public void resetScore() {
+        score = 0;
     }
 
     /**
-     * this is the main method called from the gamePanel class, from the onTouchEvent
-     * (when we press on the screen)
-     *
-     * @param xPosition
-     * @param yPosition
+     * show message of state:
+     * in this method we can implement different popup message by using
+     * a Paint class to write something, and more...
      */
-    public void mainLogic(int xPosition, int yPosition) {
-        switch (gamePanel.getGameState()) {
-            case GAME_PLAYING_STATE:
-                // do something
-                gamePanel.getGirl1().setY(yPosition);
-                gamePanel.getGirl1().setX(xPosition);
-                // gamePanel.getGameState() = GameState.GAME_START_STATE;
-                break;
-            default:
-        }
-    }
+    public void showStateMessage(Canvas canvas) {
+        // and create a bitmap ref for panel image, on this panel we show a message
+        Paint paint = new Paint();
+        paint.setColor(Color.BLUE);
+        paint.setTextSize(80);
+        // set text to Bold
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
+        // write in the message
+
+        canvas.drawText("" + score, 100, 100, paint);
 
 
-
-
-
-
+    }// end drawText
     /**********************************************************************************************
      * COLLISION DETECTION METHODS
      * ********************************************************************************************
@@ -77,9 +93,8 @@ public class GameLogic {
      */
 
     /**
-     *
-     * @param bm the bitmap image for resizing
-     * @param newWidth resize size width
+     * @param bm        the bitmap image for resizing
+     * @param newWidth  resize size width
      * @param newHeight resize size height
      * @return
      */
@@ -101,18 +116,17 @@ public class GameLogic {
     }
 
     /**
-     * @param obj1 first object
-     * x1 x-position of bitmap1 on screen.
-     *  y1 y-position of bitmap1 on screen.
+     * @param obj1    first object
+     *                x1 x-position of bitmap1 on screen.
+     *                y1 y-position of bitmap1 on screen.
      * @param scaleW1 resize width bitmap11
      * @param scaleH1
-     * @param obj2 Second object.
+     * @param obj2    Second object.
      * @param scaleW2
-     * @param scaleH2
-     *  x2 x-position of bitmap2 on screen.
-     *  y2 y-position of bitmap2 on screen.
-     *
-     *           Overloaded method for isCollisionDetected, with resize
+     * @param scaleH2 x2 x-position of bitmap2 on screen.
+     *                y2 y-position of bitmap2 on screen.
+     *                <p>
+     *                Overloaded method for isCollisionDetected, with resize
      */
 
     // collision method , near collision
@@ -131,7 +145,7 @@ public class GameLogic {
         Bitmap bitmap11;
         int x1, y1;
         Bitmap bitmap22;
-        int x2,y2;
+        int x2, y2;
 
         bitmap11 = obj1.getImage();
         x1 = obj1.getX();
@@ -146,18 +160,18 @@ public class GameLogic {
         Bitmap bitmap2 = bitmap22.copy(bitmap22.getConfig(), true);
 
         // scale bitmap
-        bitmap1 = getResizedBitmap(bitmap1 , scaleW1, scaleH1);
-        bitmap2 = getResizedBitmap(bitmap2 , scaleW2, scaleH2);
+        bitmap1 = getResizedBitmap(bitmap1, scaleW1, scaleH1);
+        bitmap2 = getResizedBitmap(bitmap2, scaleW2, scaleH2);
 
-        Rect bounds1 = new Rect(x1, y1, x1+bitmap1.getWidth(), y1+bitmap1.getHeight());
-        Rect bounds2 = new Rect(x2, y2, x2+bitmap2.getWidth(), y2+bitmap2.getHeight());
+        Rect bounds1 = new Rect(x1, y1, x1 + bitmap1.getWidth(), y1 + bitmap1.getHeight());
+        Rect bounds2 = new Rect(x2, y2, x2 + bitmap2.getWidth(), y2 + bitmap2.getHeight());
 
         if (Rect.intersects(bounds1, bounds2)) {
             Rect collisionBounds = getCollisionBounds(bounds1, bounds2);
             for (int i = collisionBounds.left; i < collisionBounds.right; i++) {
                 for (int j = collisionBounds.top; j < collisionBounds.bottom; j++) {
-                    int bitmap1Pixel = bitmap1.getPixel(i-x1, j-y1);
-                    int bitmap2Pixel = bitmap2.getPixel(i-x2, j-y2);
+                    int bitmap1Pixel = bitmap1.getPixel(i - x1, j - y1);
+                    int bitmap2Pixel = bitmap2.getPixel(i - x2, j - y2);
                     if (isFilled(bitmap1Pixel) && isFilled(bitmap2Pixel)) {
                         return true;
                     }
@@ -169,13 +183,13 @@ public class GameLogic {
 
     /**
      * @param obj1 First object
-     * x1 x-position of bitmap1 on screen.
-     * y1 y-position of bitmap1 on screen.
+     *             x1 x-position of bitmap1 on screen.
+     *             y1 y-position of bitmap1 on screen.
      * @param obj2 Second object.
-     * x2 x-position of bitmap2 on screen.
-     * y2 y-position of bitmap2 on screen.
-     *
-     *           Overloaded method for isCollisionDetected, without resize
+     *             x2 x-position of bitmap2 on screen.
+     *             y2 y-position of bitmap2 on screen.
+     *             <p>
+     *             Overloaded method for isCollisionDetected, without resize
      */
 
     // collision method , near collision
@@ -193,7 +207,7 @@ public class GameLogic {
         Bitmap bitmap1;
         int x1, y1;
         Bitmap bitmap2;
-        int x2,y2;
+        int x2, y2;
 
         bitmap1 = obj1.getImage();
         x1 = obj1.getX();
@@ -203,15 +217,15 @@ public class GameLogic {
         y2 = obj2.getY();
 
 
-        Rect bounds1 = new Rect(x1, y1, x1+bitmap1.getWidth(), y1+bitmap1.getHeight());
-        Rect bounds2 = new Rect(x2, y2, x2+bitmap2.getWidth(), y2+bitmap2.getHeight());
+        Rect bounds1 = new Rect(x1, y1, x1 + bitmap1.getWidth(), y1 + bitmap1.getHeight());
+        Rect bounds2 = new Rect(x2, y2, x2 + bitmap2.getWidth(), y2 + bitmap2.getHeight());
 
         if (Rect.intersects(bounds1, bounds2)) {
             Rect collisionBounds = getCollisionBounds(bounds1, bounds2);
             for (int i = collisionBounds.left; i < collisionBounds.right; i++) {
                 for (int j = collisionBounds.top; j < collisionBounds.bottom; j++) {
-                    int bitmap1Pixel = bitmap1.getPixel(i-x1, j-y1);
-                    int bitmap2Pixel = bitmap2.getPixel(i-x2, j-y2);
+                    int bitmap1Pixel = bitmap1.getPixel(i - x1, j - y1);
+                    int bitmap2Pixel = bitmap2.getPixel(i - x2, j - y2);
                     if (isFilled(bitmap1Pixel) && isFilled(bitmap2Pixel)) {
                         return true;
                     }

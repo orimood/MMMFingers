@@ -23,7 +23,7 @@ class Square extends AnimatedSpritesObject {
 
     @Override
     public void update() {
-        if (y > GamePanel.HEIGHT) {
+        if (y > GamePanel.getHEIGHT()) {
             y = -distance -200;
             x = getNextX();
         }

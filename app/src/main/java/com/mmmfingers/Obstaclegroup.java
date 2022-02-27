@@ -27,7 +27,7 @@ class Obstaclegroup extends AnimatedSpritesObject {
     }
 
     private int getNextX() {
-        return rnd.nextInt(GamePanel.WIDTH) - Math.max(width, height) / 2;
+        return rnd.nextInt(GamePanel.getWIDTH()) - Math.max(width, height) / 2;
     }
 /*
     @Override

@@ -37,7 +37,7 @@ class Teeth extends AnimatedSpritesObject {
         }*/
 
 
-        if (y > GamePanel.HEIGHT) {
+        if (y > GamePanel.getHEIGHT()) {
             y = -distance;
             x = getNextX();
         }
@@ -49,7 +49,7 @@ class Teeth extends AnimatedSpritesObject {
     }//end update
 
     private int getNextX() {
-        return rnd.nextInt(GamePanel.WIDTH) - Math.max(width, height) / 2;
+        return rnd.nextInt(GamePanel.getWIDTH()) - Math.max(width, height) / 2;
     }
 
 
