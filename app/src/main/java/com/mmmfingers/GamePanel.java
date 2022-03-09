@@ -22,6 +22,7 @@ public class GamePanel extends SurfaceView
 
     private final SceneManager sceneManager = new SceneManager();
     private final GameScene gameScene;
+    private final EndScene endScene;
 
     /**
      * ******************************************************************
@@ -95,6 +96,7 @@ public class GamePanel extends SurfaceView
 
         // create scenes
         gameScene = new GameScene(gameLogic);
+        endScene = new EndScene(gameLogic);
 
         sceneManager.addScene(gameScene);
 
@@ -119,6 +121,7 @@ public class GamePanel extends SurfaceView
     public void surfaceCreated(SurfaceHolder holder) {
 
         gameScene.initialize(this);
+        endScene.initialize(this);
 
         // play game start sound
 
