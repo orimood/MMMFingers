@@ -11,6 +11,9 @@ package com.mmmfingers;
  */
 
 
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -23,12 +26,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private static int WIDTH;
     private static int HEIGHT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
+
+        // register for low battery
+        IntentFilter filterbat = new IntentFilter(Intent.ACTION_BATTERY_LOW);
+        registerReceiver(myBroadcastReceiver, filterbat);
+
 
         // turn title off
         requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -1,9 +1,15 @@
 package com.mmmfingers;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
+import android.content.Context;
+import android.content.Intent;
+import android.content.BroadcastReceiver;
 
 import com.mmmfingers.sceneBased.Scene;
 
@@ -11,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameScene implements Scene {
-
     private final static int DISTANCE = 100;
 
     private final GameLogic gameLogic;
@@ -36,6 +41,7 @@ public class GameScene implements Scene {
 
     @Override
     public void initialize(View view) {
+
         // background of the game, some background picture
         background = new Background(BitmapFactory.decodeResource(view.getResources(), R.drawable.background1),
                 1, 1);
