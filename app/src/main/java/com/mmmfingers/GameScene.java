@@ -19,7 +19,7 @@ import java.util.List;
 public class GameScene implements Scene {
     private final static int DISTANCE = 100;
 
-    private final GameLogic gameLogic;
+    private final GamePanel gamePanel;
 
     private final List<GameObject> animatedObjects = new ArrayList<>();
 
@@ -35,25 +35,21 @@ public class GameScene implements Scene {
 
     private int moveX = -10;
 
-    public GameScene(GameLogic gameLogic) {
-        this.gameLogic = gameLogic;
+    public GameScene(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
     }
 
     @Override
     public void initialize(View view) {
-
-        // background of the game, some background picture
         background = new Background(BitmapFactory.decodeResource(view.getResources(), R.drawable.background1),
                 1, 1);
         background1 = new Background(BitmapFactory.decodeResource(view.getResources(), R.drawable.background1),
                 1, 1);
-        //      animatedObjects.add(background1);
 
         // background of the game, some background picture
         background2 = new Background(BitmapFactory.decodeResource(view.getResources(), R.drawable.background1),
                 1, 1);
         background2.setY(-background2.height);
-        //   animatedObjects.add(background2);
 
 
         /**
@@ -94,7 +90,7 @@ public class GameScene implements Scene {
         groupobst.add(square2);
 
         for (int i = 0; i < obstacles.length; i++) {
-            int rotateAngel = gameLogic.random.nextInt(10) + 3;
+            int rotateAngel = gamePanel.getGameLogic().random.nextInt(10) + 3;
             int distance = GamePanel.getHEIGHT() / (obstacles.length - 1);
             obstacles[i] = new Teeth(BitmapFactory.decodeResource(view.getResources(), R.drawable.obstacle_sprite1),
                     15, 15, i * -distance, rotateAngel, distance);
@@ -155,23 +151,22 @@ public class GameScene implements Scene {
 
         square.setX(square.getX() + moveX);
 
-        if (gameLogic.collision(player, square)) {
-            gameLogic.decScore(1);
+        if (gamePanel.getGameLogic().collision(player, square)) {
+            gamePanel.getGameLogic().decScore(1);
         }
-        if (gameLogic.collision(player, square2)) {
-            gameLogic.decScore(1);
+        if (gamePanel.getGameLogic().collision(player, square2)) {
+            gamePanel.getGameLogic().decScore(1);
         }
 
         for (GameObject gameObject : animatedObjects) {
-            if (gameLogic.collision(player, (AnimatedSpritesObject) gameObject)) {
-                gameLogic.decScore(1);
+            if (gamePanel.getGameLogic().collision(player, (AnimatedSpritesObject) gameObject)) {
+                gamePanel.getGameLogic().decScore(1);
             }
         }
     }
 
     @Override
     public void draw(Canvas canvas) {
-
         // draw the static background (TODO: fix)
         background.draw(canvas);
         background1.draw(canvas);
@@ -189,11 +184,21 @@ public class GameScene implements Scene {
 
         player.draw(canvas);
 
-        gameLogic.showStateMessage(canvas);
+        gamePanel.getGameLogic().showStateMessage(canvas);
     }
 
     @Override
     public void resetAll() {
+
+    }
+
+    @Override
+    public void activate() {
+
+    }
+
+    @Override
+    public void deactivate() {
 
     }
 }

@@ -18,9 +18,13 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -62,7 +66,11 @@ public class MainActivity extends AppCompatActivity {
         hideSystemUI();
 
         // in this lesson we will set the content view and we will create a new class
-        setContentView(new GamePanel(this, WIDTH, HEIGHT));
+        setContentView(R.layout.activity_main);
+        FrameLayout mainLayout = findViewById(R.id.mainLayout);
+        mainLayout.addView(new GamePanel(mainLayout, WIDTH, HEIGHT), -1, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     /**

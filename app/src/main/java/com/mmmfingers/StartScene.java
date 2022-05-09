@@ -3,25 +3,20 @@ package com.mmmfingers;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
 import com.mmmfingers.sceneBased.Scene;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class EndScene implements Scene {
+public class StartScene implements Scene {
 
     private Background background;
-    private Button gotoGame;
+
     private final GamePanel gamePanel;
+    private Button gotoGame;
 
-    public EndScene(GamePanel gamePanel) {
+    public StartScene(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
-
         gotoGame = gamePanel.getParentView().findViewById(R.id.nextbutton);
     }
 
@@ -29,6 +24,8 @@ public class EndScene implements Scene {
     public void initialize(View view){
 //        background = new Background(BitmapFactory.decodeResource(view.getResources(), R.drawable.endscreen),
 //                1, 1);
+
+
     }
 
     @Override
@@ -39,7 +36,7 @@ public class EndScene implements Scene {
     @Override
     public void draw(Canvas canvas){
 //        background.draw(canvas);
-        canvas.drawColor(Color.RED);
+        canvas.drawColor(Color.argb(50, 0, 102, 102));
     }
 
     @Override
@@ -49,7 +46,7 @@ public class EndScene implements Scene {
 
     @Override
     public void receiveTouch(int action, int xPosition, int yPosition){
-//        gamePanel.goToStartScreen();
+        gamePanel.nextScene();
     }
 
     @Override
@@ -59,18 +56,13 @@ public class EndScene implements Scene {
 
     @Override
     public void activate() {
-        gamePanel.setVisibility(View.INVISIBLE);
         gotoGame.setVisibility(View.VISIBLE);
-        gotoGame.bringToFront();
-        gamePanel.invalidate();
         gamePanel.getParentView().invalidate();
-        gamePanel.getParentView().bringToFront();
     }
 
     @Override
     public void deactivate() {
         gotoGame.setVisibility(View.INVISIBLE);
-        gamePanel.invalidate();
         gamePanel.getParentView().invalidate();
     }
 }

@@ -1,6 +1,7 @@
 package com.mmmfingers.sceneBased;
 
 import android.graphics.Canvas;
+import android.view.View;
 
 import java.util.Stack;
 
@@ -21,8 +22,18 @@ public class SceneManager {
             scenes.peek().update();
     }
 
+    public void initialize(View view){
+        for (Scene scene: scenes) {
+            scene.initialize(view);
+        }
+
+        activate();
+    }
+
     public void draw(Canvas canvas) {
-        scenes.peek().draw(canvas);
+        if (!scenes.isEmpty()) {
+            scenes.peek().draw(canvas);
+        }
 
         if (!popups.isEmpty()) {
             popups.peek().draw(canvas);
@@ -45,11 +56,35 @@ public class SceneManager {
     }
 
     public void closePopUp(PopUp popUp) {
-        popups.pop();
+        if (!popups.isEmpty()) {
+            popups.pop();
+        }
     }
 
-    public void previousScene(Scene scene) {
-        scenes.pop();
+    public void nextScene() {
+        if (!scenes.isEmpty()) {
+            deactivate();
+            scenes.pop();
+        }
+        activate();
+    }
+
+    public void deactivate() {
+        if (!scenes.isEmpty()) {
+            Scene current = scenes.peek();
+            if (current != null) {
+                current.deactivate();
+            }
+        }
+    }
+
+    public void activate() {
+        if (!scenes.isEmpty()) {
+            Scene current = scenes.peek();
+            if (current != null) {
+                current.activate();
+            }
+        }
     }
 
     public Stack<Scene> getScenes() {
@@ -59,6 +94,4 @@ public class SceneManager {
     public Stack<PopUp> getPopups() {
         return popups;
     }
-
-
 }

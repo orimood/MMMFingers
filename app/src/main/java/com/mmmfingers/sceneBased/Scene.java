@@ -15,4 +15,8 @@ public interface Scene {
     void receiveTouch(int action, int xPosition, int yPosition);
 
     void resetAll();
+
+    void activate();
+
+    void deactivate();
 }

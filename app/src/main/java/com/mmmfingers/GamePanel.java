@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import com.mmmfingers.sceneBased.SceneManager;
 
@@ -21,6 +23,7 @@ public class GamePanel extends SurfaceView
     private static int HEIGHT;
 
     private final SceneManager sceneManager = new SceneManager();
+    private final StartScene startScene;
     private final GameScene gameScene;
     private final EndScene endScene;
 
@@ -64,8 +67,10 @@ public class GamePanel extends SurfaceView
     private final float scaleFactorXMul;
     private final float scaleFactorYMul;
 
+    public View parentView;
+
     //lets create the constructor of our new class,that is going to help us calling objects and methods!
-    public GamePanel(Context context, int WIDTH, int HEIGHT) {
+    public GamePanel(View parentView, int WIDTH, int HEIGHT) {
 
         /**
          context we receive from our activity,
@@ -75,7 +80,9 @@ public class GamePanel extends SurfaceView
          and we pass the context to the super class - which is "SurfaceView", cause it needs it
          to do it staff.
          */
-        super(context);
+        super(parentView.getContext());
+
+        this.parentView = parentView;
 
         // of phone's dimensions
         GamePanel.WIDTH = WIDTH;
@@ -95,10 +102,11 @@ public class GamePanel extends SurfaceView
         gameLogic = new GameLogic();
 
         // create scenes
-        gameScene = new GameScene(gameLogic);
-        endScene = new EndScene(gameLogic);
+        startScene = new StartScene(this);
+        gameScene = new GameScene(this);
+        endScene = new EndScene(this);
 
-        sceneManager.addScene(gameScene);
+        goToStartScreen();
 
         // create thread OBJECT
         gameThread = new GameThread(getHolder(), this);
@@ -119,9 +127,7 @@ public class GamePanel extends SurfaceView
      */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-
-        gameScene.initialize(this);
-        endScene.initialize(this);
+        sceneManager.initialize(this);
 
         // play game start sound
 
@@ -183,18 +189,20 @@ public class GamePanel extends SurfaceView
         xPosition = (int) (event.getX() / scaleFactorXMul);
         yPosition = (int) (event.getY() / scaleFactorYMul);
 
+        sceneManager.receiveTouch(action, xPosition, yPosition);
+
         // if game started
-        switch (gameLogic.getGameState()) {
-            case GAME_PLAYING_STATE: {
-                gameScene.receiveTouch(action, xPosition, yPosition);
-                break;
-            }
-            case GAME_START_STATE: {
-                // start the game  after first tap on the screen
-                if (action == MotionEvent.ACTION_UP)
-                    gameLogic.setGameState(GameState.GAME_PLAYING_STATE);
-            }
-        }
+//        switch (gameLogic.getGameState()) {
+//            case GAME_PLAYING_STATE: {
+//                gameScene.receiveTouch(action, xPosition, yPosition);
+//                break;
+//            }
+//            case GAME_START_STATE: {
+//                // start the game  after first tap on the screen
+//                if (action == MotionEvent.ACTION_UP)
+//                    gameLogic.setGameState(GameState.GAME_PLAYING_STATE);
+//            }
+//        }
 
         return true;
     }
@@ -205,10 +213,12 @@ public class GamePanel extends SurfaceView
      * So our game run a new game loop ....
      */
     public void update() {
+        sceneManager.update();
+
         // if game started
-        if (gameLogic.getGameState() == GameState.GAME_PLAYING_STATE) {
-            gameScene.update();
-        }
+//        if (gameLogic.getGameState() == GameState.GAME_PLAYING_STATE) {
+//            gameScene.update();
+//        }
     }
 
     /**
@@ -242,24 +252,44 @@ public class GamePanel extends SurfaceView
              */
             canvas.scale(scaleFactorX * scaleFactorXMul, scaleFactorY * scaleFactorYMul);
 
+            sceneManager.draw(canvas);
             // if game started
-            switch (gameLogic.getGameState()) {
-                case GAME_PLAYING_STATE: {
-                    gameScene.draw(canvas);
-                    break;
-                }
-                // game not stared, so show game start message
-                case GAME_START_STATE: {
-                    // set background color
-                    canvas.drawColor(Color.argb(50, 0, 102, 102));
-
-                    break;
-                }
-            }
+//            switch (gameLogic.getGameState()) {
+//                case GAME_PLAYING_STATE: {
+//                    gameScene.draw(canvas);
+//                    break;
+//                }
+//                // game not stared, so show game start message
+//                case GAME_START_STATE: {
+//                    // set background color
+//                    canvas.drawColor(Color.argb(50, 0, 102, 102));
+//
+//                    break;
+//                }
+//            }
 
             // restore the saves canvas state back
             canvas.restoreToCount(savedState);
         }
+    }
+
+    public void nextScene() {
+        sceneManager.nextScene();
+    }
+
+    public void startNewGame() {
+        gameLogic.resetScore();
+        nextScene();
+        sceneManager.addScene(endScene);
+        sceneManager.addScene(gameScene);
+    }
+
+    public void goToStartScreen() {
+        gameLogic.resetScore();
+        nextScene();
+        sceneManager.addScene(endScene);
+        sceneManager.addScene(gameScene);
+        sceneManager.addScene(startScene);
     }
 
 
@@ -278,4 +308,11 @@ public class GamePanel extends SurfaceView
         return HEIGHT;
     }
 
+    public GameLogic getGameLogic() {
+        return gameLogic;
+    }
+
+    public View getParentView() {
+        return parentView;
+    }
 }//end of class
