@@ -21,6 +21,8 @@ public class GameScene implements Scene {
 
     private final GamePanel gamePanel;
 
+    public static String SCENE_NAME = "GAME_SCENE";
+
     private final List<GameObject> animatedObjects = new ArrayList<>();
 
     private final List<GameObject> groupobst = new ArrayList<>();

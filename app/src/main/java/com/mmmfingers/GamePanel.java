@@ -9,7 +9,12 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.mmmfingers.sceneBased.PopUp;
+import com.mmmfingers.sceneBased.Scene;
 import com.mmmfingers.sceneBased.SceneManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GamePanel extends SurfaceView
         implements SurfaceHolder.Callback {
@@ -26,6 +31,9 @@ public class GamePanel extends SurfaceView
     private final StartScene startScene;
     private final GameScene gameScene;
     private final EndScene endScene;
+
+    private Map<String, Scene> sceneDictionary = new HashMap<>();
+    private Map<String, PopUp> popUpDictionary = new HashMap<>();
 
     /**
      * ******************************************************************
@@ -80,6 +88,7 @@ public class GamePanel extends SurfaceView
          and we pass the context to the super class - which is "SurfaceView", cause it needs it
          to do it staff.
          */
+
         super(parentView.getContext());
 
         this.parentView = parentView;
@@ -97,6 +106,8 @@ public class GamePanel extends SurfaceView
          */
         scaleFactorXMul = 1.0f + ((WIDTH - Constants.ORIGINAL_SCREEN_WIDTH) * 1.0f / Constants.ORIGINAL_SCREEN_WIDTH);
         scaleFactorYMul = 1.0f + ((HEIGHT - Constants.ORIGINAL_SCREEN_HEIGHT) * 1.0f / Constants.ORIGINAL_SCREEN_HEIGHT);
+
+        sceneManager.addScene(new StartScene(this));
 
         // create GameLogic OBJECT
         gameLogic = new GameLogic();
@@ -292,6 +303,11 @@ public class GamePanel extends SurfaceView
         sceneManager.addScene(startScene);
     }
 
+    public void addScene(String sceneName){
+        sceneManager.addScene(sceneDictionary.get(sceneName));
+        sceneManager.getScenes().peek().resetAll();
+
+    }
 
     /**
      * Sounds
