@@ -76,7 +76,8 @@ public class AnimatedSpritesObject extends GameObject {
              *Our image has XxX sprites so [0] is the first sprite,  [1] the second,  [2] the third ...
              */
             if (i % rowLength == 0 && i > 0) row++;
-            spritesArray[i] = Bitmap.createBitmap(imageThatHasSprites, (i - (rowLength * row)) * width, row * height,
+            spritesArray[i] = Bitmap.createBitmap(imageThatHasSprites,
+                    (i - (rowLength * row)) * width, row * height,
                     width, height);
         }
 

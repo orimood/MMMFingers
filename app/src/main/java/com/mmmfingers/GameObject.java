@@ -23,8 +23,8 @@ import android.graphics.Rect;
  */
 
 public abstract class GameObject {
-    protected int x;
-    protected int y;
+    protected volatile int x;
+    protected volatile int y;
     protected int width;
     protected int height;
 
