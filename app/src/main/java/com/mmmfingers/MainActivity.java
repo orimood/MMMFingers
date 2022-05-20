@@ -11,7 +11,6 @@ package com.mmmfingers;
  */
 
 
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
@@ -21,19 +20,16 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-
 
     private static int WIDTH;
     private static int HEIGHT;
@@ -108,5 +104,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        // switch for selecting the actions of the right option selected
+        switch (item.getItemId()) {
+            case R.id.item1:
+                // start the right activity
+                return true;
+            case R.id.item2:
+                // start the right activity
+                return true;
+            case R.id.item3:
+                // start the right activity
+                return true;
+        }
+        return onOptionsItemSelected(item);
+    }
 
 }
