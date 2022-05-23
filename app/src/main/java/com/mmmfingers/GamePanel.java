@@ -2,16 +2,12 @@ package com.mmmfingers;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.FrameLayout;
 
-import com.mmmfingers.sceneBased.PopUp;
-import com.mmmfingers.sceneBased.Scene;
-import com.mmmfingers.sceneBased.SceneManager;
+import androidx.annotation.MainThread;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,20 +23,23 @@ public class GamePanel extends SurfaceView
     private static int WIDTH;
     private static int HEIGHT;
 
-    private final SceneManager sceneManager = new SceneManager();
-    private final StartScene startScene;
-    private final GameScene gameScene;
-    private final EndScene endScene;
+    private SceneManager sceneManager;
+    public static Canvas canvas;
 
     private Map<String, Scene> sceneDictionary = new HashMap<>();
     private Map<String, PopUp> popUpDictionary = new HashMap<>();
+
+    private GameThread thread;
+    MainActivity mainActivity;
+
+    GameState gameState = GameState.GAME_START_STATE;
 
     /**
      * ******************************************************************
      * game logic class - the "BRAIN" of our game, rules and more ...
      * very important class - all the game algorithms are there
      */
-    private final GameLogic gameLogic;
+    GameLogic gameLogic;
     /**
      * ******************************************************************
      */
@@ -75,10 +74,8 @@ public class GamePanel extends SurfaceView
     private final float scaleFactorXMul;
     private final float scaleFactorYMul;
 
-    public View parentView;
-
     //lets create the constructor of our new class,that is going to help us calling objects and methods!
-    public GamePanel(View parentView, int WIDTH, int HEIGHT) {
+    public GamePanel(Context context, int WIDTH, int HEIGHT) {
 
         /**
          context we receive from our activity,
@@ -89,14 +86,18 @@ public class GamePanel extends SurfaceView
          to do it staff.
          */
 
-        super(parentView.getContext());
+        super(context);
 
-        this.parentView = parentView;
+
 
         // of phone's dimensions
         GamePanel.WIDTH = WIDTH;
         GamePanel.HEIGHT = HEIGHT;
 
+        sceneManager = new SceneManager();
+        sceneDictionary.put(StartScene.SCENE_NAME, new StartScene(this));
+        addScene(StartScene.SCENE_NAME);
+        mainActivity = new MainActivity();
         /**
          * set the drawing scaled to the screen size WIDTH & HEIGHT, using the defaults
          * the defaults of our screen are in the Constants class
@@ -111,13 +112,8 @@ public class GamePanel extends SurfaceView
 
         // create GameLogic OBJECT
         gameLogic = new GameLogic();
+        thread = new GameThread(getHolder(), this);
 
-        // create scenes
-        startScene = new StartScene(this);
-        gameScene = new GameScene(this);
-        endScene = new EndScene(this);
-
-        goToStartScreen();
 
         // create thread OBJECT
         gameThread = new GameThread(getHolder(), this);
@@ -138,7 +134,8 @@ public class GamePanel extends SurfaceView
      */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        sceneManager.initialize(this);
+
+        sceneDictionary.put(GameScene.SCENE_NAME, new GameScene(this));
 
         // play game start sound
 
@@ -200,7 +197,7 @@ public class GamePanel extends SurfaceView
         xPosition = (int) (event.getX() / scaleFactorXMul);
         yPosition = (int) (event.getY() / scaleFactorYMul);
 
-        sceneManager.receiveTouch(action, xPosition, yPosition);
+        sceneManager.receiveTouch(event);
 
         // if game started
 //        switch (gameLogic.getGameState()) {
@@ -284,23 +281,18 @@ public class GamePanel extends SurfaceView
         }
     }
 
-    public void nextScene() {
-        sceneManager.nextScene();
-    }
 
     public void startNewGame() {
         gameLogic.resetScore();
-        nextScene();
-        sceneManager.addScene(endScene);
-        sceneManager.addScene(gameScene);
+        addScene(EndScene.SCENE_NAME);
+        addScene(GameScene.SCENE_NAME);
     }
 
     public void goToStartScreen() {
         gameLogic.resetScore();
-        nextScene();
-        sceneManager.addScene(endScene);
-        sceneManager.addScene(gameScene);
-        sceneManager.addScene(startScene);
+        addScene(EndScene.SCENE_NAME);
+        addScene(GameScene.SCENE_NAME);
+        addScene(StartScene.SCENE_NAME);
     }
 
     public void addScene(String sceneName){
@@ -328,7 +320,4 @@ public class GamePanel extends SurfaceView
         return gameLogic;
     }
 
-    public View getParentView() {
-        return parentView;
-    }
 }//end of class

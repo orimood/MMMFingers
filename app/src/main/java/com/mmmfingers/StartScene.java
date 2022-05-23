@@ -2,36 +2,29 @@ package com.mmmfingers;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.mmmfingers.sceneBased.Button;
-import com.mmmfingers.sceneBased.Scene;
-import com.mmmfingers.sceneBased.SceneManager;
+import android.view.MotionEvent;
 
 public class StartScene implements Scene {
+
+
+    public static float scaleFactorXMul = 1.0f;
+    public static float scaleFactorYMul = 1.0f;
+    public static String SCENE_NAME = "START_SCENE";
 
     private Background background;
 
     private  GamePanel gamePanel;
-    private Button gotoGame;
+    private Button startGame;
 
     public StartScene(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
-        gotoGame = new Button((BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.start_btn)), 1,1);
-        gotoGame.setX(Constants.ORIGINAL_SCREEN_WIDTH/2 - gotoGame.getWidth()/2);
-        gotoGame.setY(Constants.ORIGINAL_SCREEN_HEIGHT/2 - gotoGame.getHeight());
-        gotoGame.setButtonTouchListener(new Button.OnButtonTouchListener() {
+        startGame = new Button((BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.start_btn)), 1,1);
+        startGame.setX(Constants.ORIGINAL_SCREEN_WIDTH/2 - startGame.getWidth()/2);
+        startGame.setY(Constants.ORIGINAL_SCREEN_HEIGHT/2 - startGame.getHeight());
+        startGame.setButtonTouchListener(new Button.OnButtonTouchListener() {
             @Override
             public void onTouchDown() {
-
-            }
+                gamePanel.addScene(GameScene.SCENE_NAME);            }
 
             @Override
             public void onTouchUp() {
@@ -43,22 +36,18 @@ public class StartScene implements Scene {
 
     }
 
-    @Override
-    public void initialize(View view){
 
-
-    }
 
     @Override
     public void update(){
-        gotoGame.update();
+        startGame.update();
     }
 
     @Override
     public void draw(Canvas canvas){
 //        background.draw(canvas);
 
-        gotoGame.draw(canvas);
+        startGame.draw(canvas);
     }
 
     @Override
@@ -67,23 +56,23 @@ public class StartScene implements Scene {
     }
 
     @Override
-    public void receiveTouch(int action, int xPosition, int yPosition){
-        gamePanel.nextScene();
+    public void receiveTouch(MotionEvent touch){
+
+        int action = touch.getActionMasked();
+        int index = touch.getActionIndex();
+        int xPosition, yPosition;
+
+
+        // adjust x and y the screen resolution by dividing by the factors
+        xPosition = (int) (touch.getX(index) / scaleFactorXMul);
+        yPosition = (int) (touch.getY(index) / scaleFactorYMul);
+        gamePanel.addScene(GameScene.SCENE_NAME);
+
     }
 
     @Override
     public void resetAll(){
 
-    }
-
-    @Override
-    public void activate() {
-        gamePanel.getParentView().invalidate();
-    }
-
-    @Override
-    public void deactivate() {
-        gamePanel.getParentView().invalidate();
     }
 
 }

@@ -5,8 +5,6 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.mmmfingers.sceneBased.Scene;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,17 +28,14 @@ public class GameScene implements Scene {
 
     public GameScene(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
-    }
 
-    @Override
-    public void initialize(View view) {
-        background = new Background(BitmapFactory.decodeResource(view.getResources(), R.drawable.background1),
+        background = new Background(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.background1),
                 1, 1);
-        background1 = new Background(BitmapFactory.decodeResource(view.getResources(), R.drawable.background1),
+        background1 = new Background(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.background1),
                 1, 1);
 
         // background of the game, some background picture
-        background2 = new Background(BitmapFactory.decodeResource(view.getResources(), R.drawable.background1),
+        background2 = new Background(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.background1),
                 1, 1);
         background2.setY(-background2.height);
 
@@ -54,7 +49,7 @@ public class GameScene implements Scene {
          */
 
         // create girl object
-        player = new Player(BitmapFactory.decodeResource(view.getResources(), R.drawable.player),
+        player = new Player(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.player),
                 1, 1);
         player.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
         player.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 4));
@@ -63,7 +58,7 @@ public class GameScene implements Scene {
         // create square obstacles
         for (int i = 0; i < simpleObstacles.length; i++) {
             int distance = GamePanel.getHEIGHT() / (animatedObstacles.length - 1);
-            simpleObstacles[i] = new Obstacle(BitmapFactory.decodeResource(view.getResources(), R.drawable.s_square),
+            simpleObstacles[i] = new Obstacle(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.s_square),
                     1, 1, i * -distance, distance, true);
             animatedObjects.add(simpleObstacles[i]);
         }
@@ -71,11 +66,13 @@ public class GameScene implements Scene {
         // create animated teeth obstacles
         for (int i = 0; i < animatedObstacles.length; i++) {
             int distance = GamePanel.getHEIGHT() / (animatedObstacles.length - 1);
-            animatedObstacles[i] = new Obstacle(BitmapFactory.decodeResource(view.getResources(), R.drawable.obstacle_sprite2),
+            animatedObstacles[i] = new Obstacle(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.obstacle_sprite2),
                     16, 16, i * -distance, distance, false);
             animatedObjects.add(animatedObstacles[i]);
         }
+
     }
+
 
     @Override
     public void terminate() {
@@ -83,11 +80,14 @@ public class GameScene implements Scene {
     }
 
     @Override
-    public void receiveTouch(int action, int xPosition, int yPosition) {
+    public void receiveTouch(MotionEvent touch) {
+
+        int action = touch.getAction();
+
         switch (action) {
             case MotionEvent.ACTION_MOVE:
-                player.setY(yPosition);
-                player.setX(xPosition);
+                player.setY((int) touch.getY());
+                player.setX((int) touch.getX());
                 break;
             case MotionEvent.ACTION_DOWN:
                 break;
@@ -141,13 +141,4 @@ public class GameScene implements Scene {
 
     }
 
-    @Override
-    public void activate() {
-
-    }
-
-    @Override
-    public void deactivate() {
-
-    }
 }
