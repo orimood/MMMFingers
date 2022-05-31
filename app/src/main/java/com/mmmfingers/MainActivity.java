@@ -12,133 +12,114 @@ package com.mmmfingers;
 
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.ActivityInfo;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.snackbar.Snackbar;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.mmmfingers.databinding.ActivityMainBinding;
 
-import android.view.View;
 public class MainActivity extends AppCompatActivity {
 
-    private static int WIDTH;
-    private static int HEIGHT;
-    MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
-
-    GamePanel gamePanel;
-
+    private AppBarConfiguration appBarConfiguration;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //in this lesson  we will set the content view and we will create a new class
-        setContentView(R.layout.activity_main);
 
-        //turn title off
-        // requestWindowFeature(Window.FEATURE_NO_TITLE);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        // set screen landscape view
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+        setSupportActionBar(binding.toolbar);
 
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+        appBarConfiguration = new AppBarConfiguration.Builder(R.id.StartFragment, R.id.GameFragment, R.id.EndFragment).build();
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        //set to full screen
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        // get device screen size for game panel use
-        Display display = getWindowManager().getDefaultDisplay();
-        // display size in pixels
-        Point size = new Point();
-        display.getSize(size);
-        WIDTH = size.x;
-        HEIGHT = size.y;
-
-        // hideSystemUI();
-
-        gamePanel = new GamePanel(this, WIDTH, HEIGHT);
-        setContentView(gamePanel);
-
-        IntentFilter filter1 = new IntentFilter((Intent.ACTION_BATTERY_LOW));
-        registerReceiver(myBroadcastReceiver, filter1);
-
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller,
+                                             @NonNull NavDestination destination,
+                                             @Nullable Bundle arguments) {
+                if (destination.getId() == R.id.GameFragment) {
+                    binding.toolbar.setVisibility(View.GONE);
+                } else {
+                    binding.toolbar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
-
-    @Override
-    public void onStop(){
-        super.onStop();
-        unregisterReceiver(myBroadcastReceiver);
-    }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-        // switch for selecting the actions of the right option selected
-        switch (item.getItemId()) {
-            case R.id.item1:
-                // Set to Opening Scene
-                gamePanel.addScene(GameScene.SCENE_NAME);
+        // select the actions of the right option selected
+        if (id == R.id.action_start) {
+            // Go to start screen
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+            navController.navigate(R.id.StartFragment);
+            return true;
+        } else if (id == R.id.action_settings) {
+            // Set to Settings PopUp
+            return true;
+        } else if (id == R.id.action_exit) {
+            // Exit Game
+            // here we implement alertDialog
+            // if your main activity has other name write it in place of MainActivity
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-                return true;
-            case R.id.item2:
-                // Set to Settings PopUp
+            // set the message of the alert dialog
+            builder.setMessage("Are you sure you want to exit ?")
+                    // set the yes button
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // finish and exit the application
+                            finish();
+                        }
+                        // set the no button
+                        // do nothing
+                    }).setNegativeButton("Cancel", null);
+            // create the alert dialog
+            AlertDialog alertDialog = builder.create();
 
+            // show it, start the alert dialog
+            alertDialog.show();
 
-                return true;
-            case R.id.item3:
-                // Exit Game
-                // here we implement alertDialog
-                // if your main activity has other name write it in place of MainActivity
-                AlertDialog.Builder builder  = new AlertDialog.Builder(MainActivity.this);
-
-                // set the message of the alert dialog
-                builder.setMessage("Are you sure you want to exit ?")
-                        // set the yes button
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                // finish and exit the application
-                                finish();
-                            }
-                            // set the no button
-                            // do nothing
-                        }).setNegativeButton("Cancel", null);
-                // create the alert dialog
-                AlertDialog alertDialog = builder.create();
-
-                // show it, start the alert dialog
-                alertDialog.show();
-
-
-
-
-                return true;
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
+                || super.onSupportNavigateUp();
     }
 
 
@@ -150,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
         // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         View decorView = getWindow().getDecorView();
-        ((View) decorView).setSystemUiVisibility(
+        decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE
                         // Set the content to appear under the system bars so that the
                         // content doesn't resize when the system bars hide and show.

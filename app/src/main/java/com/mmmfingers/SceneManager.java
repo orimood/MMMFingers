@@ -7,56 +7,53 @@ import android.view.MotionEvent;
 import java.util.Stack;
 
 
-
 public class SceneManager {
 
-    private Stack<Scene> scenes;
-    private Stack<PopUp> popUps;
+    private final Stack<Scene> scenes;
+    private final Stack<PopUp> popUps;
 
-    public SceneManager(){
-
+    public SceneManager() {
         scenes = new Stack<Scene>();
         popUps = new Stack<PopUp>();
-
     }
 
 
-    public void update(){
-        if(!popUps.isEmpty())
+    public void update() {
+        if (!popUps.isEmpty())
             popUps.peek().update();
-        else
+        else if (!scenes.isEmpty())
             scenes.peek().update();
 
     }
 
-    public void draw(Canvas canvas){
+    public void draw(Canvas canvas) {
         scenes.peek().draw(canvas);
-        if(!popUps.isEmpty())
+        if (!popUps.isEmpty())
             popUps.peek().draw(canvas);
 
     }
 
-    public void receiveTouch(MotionEvent touch){
-        if(!popUps.isEmpty())
+    public void receiveTouch(MotionEvent touch) {
+        if (!popUps.isEmpty())
             popUps.peek().receiveTouch(touch);
-        else
+        else if (!scenes.isEmpty())
             scenes.peek().receiveTouch(touch);
 
     }
 
-    public void addScene(Scene scene){
+    public void addScene(Scene scene) {
         scenes.push(scene);
     }
 
-    public void openPopUp(PopUp popUp){
+    public void openPopUp(PopUp popUp) {
         popUps.push(popUp);
     }
 
-    public void closePopUp(){
+    public void closePopUp() {
         popUps.pop();
     }
 
-    public void removeScene(){
+    public void removeScene() {
         scenes.pop();
     }
 

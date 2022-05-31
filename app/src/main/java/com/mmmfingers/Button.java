@@ -2,17 +2,11 @@ package com.mmmfingers;
 
 
 import android.graphics.Bitmap;
-import android.media.MediaPlayer;
-
-import com.mmmfingers.AnimatedSpritesObject;
+import android.view.MotionEvent;
 
 public class Button extends AnimatedSpritesObject {
 
     int spriteNumber = 0;
-
-    private int motionEventID;
-
-    private boolean pressed = false;
 
     private OnButtonTouchListener buttonTouchListener;
 
@@ -34,34 +28,46 @@ public class Button extends AnimatedSpritesObject {
         this.spriteNumber = spriteNumber;
     }
 
-    public boolean isPressed() {
-        return pressed;
-    }
+    public boolean onTouchEvent(MotionEvent event) {
+        final int action = event.getAction();
 
-    public void setPressed(boolean pressed) {
-        if (!this.pressed && pressed && buttonTouchListener != null){
-            buttonTouchListener.onTouchDown();
+        final int evX = (int) event.getX();
+        final int evY = (int) event.getY();
+
+        // if event is in the button rectangle
+        if (getRectangle().contains(evX, evY)) {
+
+            // if we have a listener defined
+            if (buttonTouchListener != null) {
+
+                // on action up, call onTouchUp
+                if (action == MotionEvent.ACTION_UP) {
+                    buttonTouchListener.onTouchUp();
+                    return true;
+                }
+
+                // on action down, call onTouchDown
+                else if (action == MotionEvent.ACTION_DOWN) {
+                    buttonTouchListener.onTouchDown();
+                    return true;
+                }
+            }
         }
-        if (this.pressed && !pressed && buttonTouchListener != null){
-            buttonTouchListener.onTouchUp();
-        }
-        this.pressed = pressed;
+
+        return false;
     }
 
-    public int getMotionEventID() {
-        return motionEventID;
+    public OnButtonTouchListener getButtonTouchListener() {
+        return buttonTouchListener;
     }
 
-    public void setMotionEventID(int motionEventID) {
-        this.motionEventID = motionEventID;
+    public void setButtonTouchListener(OnButtonTouchListener buttonTouchListener) {
+        this.buttonTouchListener = buttonTouchListener;
     }
 
-    public OnButtonTouchListener getButtonTouchListener() { return buttonTouchListener; }
-
-    public void setButtonTouchListener(OnButtonTouchListener buttonTouchListener) { this.buttonTouchListener = buttonTouchListener; }
-
-    public interface OnButtonTouchListener{
+    public interface OnButtonTouchListener {
         void onTouchDown();
+
         void onTouchUp();
     }
 }

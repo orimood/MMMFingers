@@ -2,8 +2,12 @@ package com.mmmfingers;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.core.os.HandlerCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +74,6 @@ public class GameScene implements Scene {
                     16, 16, i * -distance, distance, false);
             animatedObjects.add(animatedObstacles[i]);
         }
-
     }
 
 

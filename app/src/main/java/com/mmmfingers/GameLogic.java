@@ -7,8 +7,12 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.Looper;
 
-import java.util.Random;
+import androidx.core.os.HandlerCompat;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 /**
  * @author Ori Sinvani.
@@ -26,44 +30,35 @@ import java.util.Random;
 
 public class GameLogic {
 
+    private volatile int score;
 
-    /**
-     * This (ENUM CLASS) will help us navigate in our game states
-     * // current game state - start of the game MESSAGE SHOWN
-     */
-    private GameState gameState = GameState.GAME_START_STATE;
-
-    // random for dices roll results
-    Random random = new Random();
-
-    private int score;
+    private final GamePanel gamePanel;
 
     /**
      * Constructor
      */
-    public GameLogic() {
-
+    public GameLogic(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
     }
 
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
+    public int getScore() {
+        return score;
     }
 
     public void incScore(int diff) {
         score += diff;
+        gamePanel.checkScore(score);
     }
 
     public void decScore(int diff) {
         score -= diff;
+        gamePanel.checkScore(score);
     }
 
     public void resetScore() {
         score = 0;
     }
+
 
     /**
      * show message of state:
@@ -236,19 +231,15 @@ public class GameLogic {
 
 
     private static Rect getCollisionBounds(Rect rect1, Rect rect2) {
-        int left = (int) Math.max(rect1.left, rect2.left);
-        int top = (int) Math.max(rect1.top, rect2.top);
-        int right = (int) Math.min(rect1.right, rect2.right);
-        int bottom = (int) Math.min(rect1.bottom, rect2.bottom);
+        int left = Math.max(rect1.left, rect2.left);
+        int top = Math.max(rect1.top, rect2.top);
+        int right = Math.min(rect1.right, rect2.right);
+        int bottom = Math.min(rect1.bottom, rect2.bottom);
         return new Rect(left, top, right, bottom);
     }
 
     private static boolean isFilled(int pixel) {
         return pixel != Color.TRANSPARENT;
-    }
-
-    public int getScore() {
-        return score;
     }
 
     /**********************************************************************************************

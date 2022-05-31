@@ -1,13 +1,16 @@
 package com.mmmfingers;
 
-import android.content.Context;
+import android.app.Activity;
 import android.graphics.Canvas;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
-import androidx.annotation.MainThread;
+import androidx.core.os.HandlerCompat;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,16 +26,17 @@ public class GamePanel extends SurfaceView
     private static int WIDTH;
     private static int HEIGHT;
 
-    private SceneManager sceneManager;
+    private final Activity activity;
+
+    private final SceneManager sceneManager;
     public static Canvas canvas;
 
-    private Map<String, Scene> sceneDictionary = new HashMap<>();
-    private Map<String, PopUp> popUpDictionary = new HashMap<>();
+    private final Map<String, Scene> sceneDictionary = new HashMap<>();
+    private final Map<String, PopUp> popUpDictionary = new HashMap<>();
 
-    private GameThread thread;
-    MainActivity mainActivity;
+    private final GameThread thread;
 
-    GameState gameState = GameState.GAME_START_STATE;
+    private final Handler mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
     /**
      * ******************************************************************
@@ -75,7 +79,7 @@ public class GamePanel extends SurfaceView
     private final float scaleFactorYMul;
 
     //lets create the constructor of our new class,that is going to help us calling objects and methods!
-    public GamePanel(Context context, int WIDTH, int HEIGHT) {
+    public GamePanel(Activity activity, int WIDTH, int HEIGHT) {
 
         /**
          context we receive from our activity,
@@ -86,18 +90,20 @@ public class GamePanel extends SurfaceView
          to do it staff.
          */
 
-        super(context);
+        super(activity);
 
-
+        this.activity = activity;
 
         // of phone's dimensions
         GamePanel.WIDTH = WIDTH;
         GamePanel.HEIGHT = HEIGHT;
 
         sceneManager = new SceneManager();
-        sceneDictionary.put(StartScene.SCENE_NAME, new StartScene(this));
-        addScene(StartScene.SCENE_NAME);
-        mainActivity = new MainActivity();
+
+        sceneDictionary.put(GameScene.SCENE_NAME, new GameScene(this));
+        addScene(GameScene.SCENE_NAME);
+
+
         /**
          * set the drawing scaled to the screen size WIDTH & HEIGHT, using the defaults
          * the defaults of our screen are in the Constants class
@@ -108,12 +114,10 @@ public class GamePanel extends SurfaceView
         scaleFactorXMul = 1.0f + ((WIDTH - Constants.ORIGINAL_SCREEN_WIDTH) * 1.0f / Constants.ORIGINAL_SCREEN_WIDTH);
         scaleFactorYMul = 1.0f + ((HEIGHT - Constants.ORIGINAL_SCREEN_HEIGHT) * 1.0f / Constants.ORIGINAL_SCREEN_HEIGHT);
 
-        sceneManager.addScene(new StartScene(this));
-
         // create GameLogic OBJECT
-        gameLogic = new GameLogic();
-        thread = new GameThread(getHolder(), this);
+        gameLogic = new GameLogic(this);
 
+        thread = new GameThread(getHolder(), this);
 
         // create thread OBJECT
         gameThread = new GameThread(getHolder(), this);
@@ -134,8 +138,6 @@ public class GamePanel extends SurfaceView
      */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-
-        sceneDictionary.put(GameScene.SCENE_NAME, new GameScene(this));
 
         // play game start sound
 
@@ -281,21 +283,25 @@ public class GamePanel extends SurfaceView
         }
     }
 
+    public void checkScore(int score) {
+        if (score < -30) {
+            mainThreadHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    // Go to end screen
+                    NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment_content_main);
+                    navController.navigate(R.id.EndFragment);
+                }
+            });
+        }
+    }
 
     public void startNewGame() {
         gameLogic.resetScore();
-        addScene(EndScene.SCENE_NAME);
         addScene(GameScene.SCENE_NAME);
     }
 
-    public void goToStartScreen() {
-        gameLogic.resetScore();
-        addScene(EndScene.SCENE_NAME);
-        addScene(GameScene.SCENE_NAME);
-        addScene(StartScene.SCENE_NAME);
-    }
-
-    public void addScene(String sceneName){
+    public void addScene(String sceneName) {
         sceneManager.addScene(sceneDictionary.get(sceneName));
         sceneManager.getScenes().peek().resetAll();
 

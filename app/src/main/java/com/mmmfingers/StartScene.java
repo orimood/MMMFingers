@@ -1,78 +1,89 @@
 package com.mmmfingers;
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.WindowManager;
 
-public class StartScene implements Scene {
+import androidx.annotation.NonNull;
+import androidx.navigation.fragment.NavHostFragment;
 
+public class StartScene extends SurfaceView implements SurfaceHolder.Callback {
 
-    public static float scaleFactorXMul = 1.0f;
-    public static float scaleFactorYMul = 1.0f;
-    public static String SCENE_NAME = "START_SCENE";
+    private StartFragment startFragment;
 
     private Background background;
 
-    private  GamePanel gamePanel;
-    private Button startGame;
+    private final Button startGameButton;
 
-    public StartScene(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
-        startGame = new Button((BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.start_btn)), 1,1);
-        startGame.setX(Constants.ORIGINAL_SCREEN_WIDTH/2 - startGame.getWidth()/2);
-        startGame.setY(Constants.ORIGINAL_SCREEN_HEIGHT/2 - startGame.getHeight());
-        startGame.setButtonTouchListener(new Button.OnButtonTouchListener() {
+    public StartScene(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+        getHolder().addCallback(this);
+
+        // create the start game button
+        startGameButton = new Button((BitmapFactory.decodeResource(context.getResources(), R.drawable.start_btn)), 1, 1);
+        startGameButton.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2 - startGameButton.getWidth() / 2);
+        startGameButton.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2 - startGameButton.getHeight());
+
+        startGameButton.setButtonTouchListener(new Button.OnButtonTouchListener() {
             @Override
             public void onTouchDown() {
-                gamePanel.addScene(GameScene.SCENE_NAME);            }
+
+            }
 
             @Override
             public void onTouchUp() {
-                gamePanel.addScene(GameScene.SCENE_NAME);
-
+                // if start button was clicked, tell the start fragment to move to the game fragment
+                if (startFragment != null) {
+                    NavHostFragment.findNavController(startFragment)
+                            .navigate(R.id.action_StartFragment_to_GameFragment);
+                    startFragment.getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                            WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                }
             }
         });
-
-
     }
 
-
-
-    @Override
-    public void update(){
-        startGame.update();
+    public void setStartFragment(StartFragment startFragment) {
+        this.startFragment = startFragment;
     }
 
     @Override
-    public void draw(Canvas canvas){
-//        background.draw(canvas);
-
-        startGame.draw(canvas);
+    public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+        Canvas c = getHolder().lockCanvas();
+        draw(c);
+        getHolder().unlockCanvasAndPost(c);
     }
 
     @Override
-    public void terminate(){
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
 
     }
 
     @Override
-    public void receiveTouch(MotionEvent touch){
-
-        int action = touch.getActionMasked();
-        int index = touch.getActionIndex();
-        int xPosition, yPosition;
-
-
-        // adjust x and y the screen resolution by dividing by the factors
-        xPosition = (int) (touch.getX(index) / scaleFactorXMul);
-        yPosition = (int) (touch.getY(index) / scaleFactorYMul);
-        gamePanel.addScene(GameScene.SCENE_NAME);
+    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
 
     }
 
     @Override
-    public void resetAll(){
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
 
+        startGameButton.draw(canvas);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        // check if start game button was clicked
+        if (startGameButton.onTouchEvent(event)) {
+            return true;
+        }
+
+        return true;
+    }
 }
