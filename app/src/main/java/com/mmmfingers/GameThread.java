@@ -7,8 +7,6 @@ import android.view.SurfaceHolder;
 import androidx.annotation.RequiresApi;
 
 /**
- * @author Created by Eli Guriel on 20,September,2018.
- * updated by Eli Guriel on 22/03/2021.
  * @version version 2.00
  * @since version 2.00
  * Study Android,

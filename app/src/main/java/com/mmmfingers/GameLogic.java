@@ -7,12 +7,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.os.Handler;
-import android.os.Looper;
-
-import androidx.core.os.HandlerCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 /**
  * @author Ori Sinvani.
@@ -47,12 +41,10 @@ public class GameLogic {
 
     public void incScore(int diff) {
         score += diff;
-        gamePanel.checkScore(score);
     }
 
     public void decScore(int diff) {
-        score -= diff;
-        gamePanel.checkScore(score);
+        score = Math.max(score - diff, -30);
     }
 
     public void resetScore() {

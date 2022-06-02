@@ -2,12 +2,7 @@ package com.mmmfingers;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.MotionEvent;
-import android.view.View;
-
-import androidx.core.os.HandlerCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +52,6 @@ public class GameScene implements Scene {
                 1, 1);
         player.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
         player.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 4));
-        player.setGirlWalkingDirection(WalkingDirection.RIGHT);
 
         // create square obstacles
         for (int i = 0; i < simpleObstacles.length; i++) {
@@ -118,9 +112,12 @@ public class GameScene implements Scene {
 
         for (GameObject gameObject : animatedObjects) {
             if (gamePanel.getGameLogic().collision(player, (AnimatedSpritesObject) gameObject)) {
-                gamePanel.getGameLogic().decScore(1);
+                gamePanel.endGame();
+                return;
             }
         }
+
+        gamePanel.getGameLogic().incScore(1);
     }
 
     @Override

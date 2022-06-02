@@ -1,13 +1,12 @@
 package com.mmmfingers;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.fragment.NavHostFragment;
@@ -18,9 +17,32 @@ public class EndScene extends SurfaceView implements SurfaceHolder.Callback {
 
     private Background background;
 
+    private final Button startGameButton;
+
     public EndScene(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         getHolder().addCallback(this);
+
+        // create the start game button
+        startGameButton = new Button((BitmapFactory.decodeResource(context.getResources(), R.drawable.start_btn)), 1, 1);
+        startGameButton.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2 - startGameButton.getWidth() / 2);
+        startGameButton.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2 - startGameButton.getHeight());
+
+        startGameButton.setButtonTouchListener(new Button.OnButtonTouchListener() {
+            @Override
+            public void onTouchDown() {
+
+            }
+
+            @Override
+            public void onTouchUp() {
+                // if start button was clicked, tell the start fragment to move to the game fragment
+                if (endFragment != null) {
+                    NavHostFragment.findNavController(endFragment)
+                            .navigate(R.id.action_EndFragment_to_GameFragment);
+                }
+            }
+        });
     }
 
     public void setEndFragment(EndFragment endFragment) {
@@ -48,16 +70,18 @@ public class EndScene extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        canvas.drawColor(Color.RED);
+        startGameButton.draw(canvas);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (startGameButton.onTouchEvent(event)) {
+            return true;
+        }
+
         if (endFragment != null && event.getAction() == MotionEvent.ACTION_UP) {
             NavHostFragment.findNavController(endFragment)
                     .navigate(R.id.action_EndFragment_to_StartFragment);
-            endFragment.getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
         return true;

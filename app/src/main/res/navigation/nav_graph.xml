@@ -34,5 +34,9 @@
         <action
             android:id="@+id/action_EndFragment_to_StartFragment"
             app:destination="@id/StartFragment" />
+
+        <action
+            android:id="@+id/action_EndFragment_to_GameFragment"
+            app:destination="@id/GameFragment" />
     </fragment>
 </navigation>

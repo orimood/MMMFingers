@@ -1,0 +1,392 @@
+@startuml
+
+title __MMMFINGERS's Class Diagram__\n
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.AnimatedSpritesObject {
+        - lastUpdateTime : long
+        - rotationAngle : float
+        - saveSpritesArray : Bitmap[]
+        - show : boolean
+        - spriteSheet : Bitmap
+        - spritesArray : Bitmap[]
+        + AnimatedSpritesObject()
+        + draw()
+        + getAnimation()
+        + getImage()
+        + getRotationAngle()
+        + isShow()
+        + setAnimation()
+        + setRotationAngle()
+        + setShow()
+        + update()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.Animation {
+        - currentSprite : int
+        - delay : long
+        - playedOnce : boolean
+        - rowLength : int
+        - spriteRow : int
+        - sprites : Bitmap[]
+        - startTime : long
+        + getImage()
+        + getPlayedOnce()
+        + getRowLength()
+        + getSpriteRow()
+        + getSprites()
+        + isPlayedOnce()
+        + setDelay()
+        + setPlayedOnce()
+        + setRowLength()
+        + setSprite()
+        + setSpriteRow()
+        + setSprites()
+        + update()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.Background {
+        + Background()
+        + update()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.Button {
+        ~ spriteNumber : int
+        + Button()
+        + getButtonTouchListener()
+        + getSpriteNumber()
+        + onTouchEvent()
+        + setButtonTouchListener()
+        + setSpriteNumber()
+        + update()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    interface com.mmmfingers.Button.OnButtonTouchListener {
+        {abstract} + onTouchDown()
+        {abstract} + onTouchUp()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.Constants {
+        {static} + OBSTACLE_DROPPING_RATE : int
+        {static} + ORIGINAL_SCREEN_HEIGHT : int
+        {static} + ORIGINAL_SCREEN_WIDTH : int
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.EndFragment {
+        - binding : FragmentEndBinding
+        + onCreateView()
+        + onDestroyView()
+        + onViewCreated()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.EndScene {
+        + EndScene()
+        + draw()
+        + onTouchEvent()
+        + setEndFragment()
+        + surfaceChanged()
+        + surfaceCreated()
+        + surfaceDestroyed()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.GameFragment {
+        + onCreateView()
+        + onDestroyView()
+        + onViewCreated()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.GameLogic {
+        - score : int
+        + GameLogic()
+        + collision()
+        + collision()
+        + decScore()
+        + getResizedBitmap()
+        + getScore()
+        + incScore()
+        + isCollisionDetected()
+        + isCollisionDetected()
+        + resetScore()
+        + showStateMessage()
+        {static} - getCollisionBounds()
+        {static} - isFilled()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    abstract class com.mmmfingers.GameObject {
+        # height : int
+        # width : int
+        # x : int
+        # y : int
+        {abstract} + draw()
+        + getHeight()
+        + getRectangle()
+        + getWidth()
+        + getX()
+        + getY()
+        + setHeight()
+        + setWidth()
+        + setX()
+        + setY()
+        {abstract} + update()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.GamePanel {
+        {static} + canvas : Canvas
+        {static} - HEIGHT : int
+        {static} - WIDTH : int
+        - activity : Activity
+        - mainThreadHandler : Handler
+        - popUpDictionary : Map<String, PopUp>
+        - scaleFactorXMul : float
+        - scaleFactorYMul : float
+        - sceneDictionary : Map<String, Scene>
+        + GamePanel()
+        + addScene()
+        + draw()
+        + endGame()
+        + getGameLogic()
+        {static} + getHEIGHT()
+        {static} + getWIDTH()
+        + onTouchEvent()
+        + startNewGame()
+        + surfaceChanged()
+        + surfaceCreated()
+        + surfaceDestroyed()
+        + update()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.GameScene {
+        {static} + SCENE_NAME : String
+        {static} - DISTANCE : int
+        - animatedObjects : List<GameObject>
+        - animatedObstacles : Obstacle[]
+        - moveX : int
+        - simpleObstacles : Obstacle[]
+        + GameScene()
+        + draw()
+        + receiveTouch()
+        + resetAll()
+        + terminate()
+        + update()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    enum GameState {
+      GAME_END_STATE
+      GAME_PLAYING_STATE
+      GAME_START_STATE
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.GameThread {
+        - FPS : int
+        - running : boolean
+        - surfaceHolder : SurfaceHolder
+        + GameThread()
+        + run()
+        + setRunning()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.MainActivity {
+        - appBarConfiguration : AppBarConfiguration
+        - binding : ActivityMainBinding
+        + onCreateOptionsMenu()
+        + onOptionsItemSelected()
+        + onSupportNavigateUp()
+        # onCreate()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.MyBroadcastReceiver {
+        + onReceive()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.Obstacle {
+        - currentMoveX : int
+        - distance : int
+        - moveX : boolean
+        - rnd : Random
+        + Obstacle()
+        + update()
+        - getNextX()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.Player {
+        + Player()
+        + getCenterX()
+        + getCenterY()
+        + getRadius()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    interface com.mmmfingers.PopUp {
+        {abstract} + draw()
+        {abstract} + receiveTouch()
+        {abstract} + update()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    interface com.mmmfingers.Scene {
+        {abstract} + draw()
+        {abstract} + receiveTouch()
+        {abstract} + resetAll()
+        {abstract} + terminate()
+        {abstract} + update()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.SceneManager {
+        - popUps : Stack<PopUp>
+        - scenes : Stack<Scene>
+        + SceneManager()
+        + addScene()
+        + closePopUp()
+        + draw()
+        + getPopUps()
+        + getScenes()
+        + openPopUp()
+        + receiveTouch()
+        + removeScene()
+        + update()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.Score {
+        - score : int
+        - textView : TextView
+        + Score()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.StartFragment {
+        - binding : FragmentStartBinding
+        + onCreateView()
+        + onDestroyView()
+        + onViewCreated()
+    }
+  }
+  
+
+  namespace com.mmmfingers {
+    class com.mmmfingers.StartScene {
+        + StartScene()
+        + draw()
+        + onTouchEvent()
+        + setStartFragment()
+        + surfaceChanged()
+        + surfaceCreated()
+        + surfaceDestroyed()
+    }
+  }
+  
+
+  com.mmmfingers.AnimatedSpritesObject -up-|> com.mmmfingers.GameObject
+  com.mmmfingers.AnimatedSpritesObject o-- com.mmmfingers.Animation : animation
+  com.mmmfingers.Animation -up-|> android.view.animation.Animation
+  com.mmmfingers.Background -up-|> com.mmmfingers.AnimatedSpritesObject
+  com.mmmfingers.Button -up-|> com.mmmfingers.AnimatedSpritesObject
+  com.mmmfingers.Button o-- com.mmmfingers.Button.OnButtonTouchListener : buttonTouchListener
+  com.mmmfingers.Button +-down- com.mmmfingers.Button.OnButtonTouchListener
+  com.mmmfingers.EndFragment -up-|> androidx.fragment.app.Fragment
+  com.mmmfingers.EndScene .up.|> android.view.SurfaceHolder.Callback
+  com.mmmfingers.EndScene -up-|> android.view.SurfaceView
+  com.mmmfingers.EndScene o-- com.mmmfingers.Background : background
+  com.mmmfingers.EndScene o-- com.mmmfingers.EndFragment : endFragment
+  com.mmmfingers.EndScene o-- com.mmmfingers.Button : startGameButton
+  com.mmmfingers.GameFragment -up-|> androidx.fragment.app.Fragment
+  com.mmmfingers.GameFragment o-- com.mmmfingers.GamePanel : gamePanel
+  com.mmmfingers.GameLogic o-- com.mmmfingers.GamePanel : gamePanel
+  com.mmmfingers.GamePanel .up.|> android.view.SurfaceHolder.Callback
+  com.mmmfingers.GamePanel -up-|> android.view.SurfaceView
+  com.mmmfingers.GamePanel o-- com.mmmfingers.GameLogic : gameLogic
+  com.mmmfingers.GamePanel o-- com.mmmfingers.GameThread : gameThread
+  com.mmmfingers.GamePanel o-- com.mmmfingers.SceneManager : sceneManager
+  com.mmmfingers.GamePanel o-- com.mmmfingers.GameThread : thread
+  com.mmmfingers.GameScene .up.|> com.mmmfingers.Scene
+  com.mmmfingers.GameScene o-- com.mmmfingers.Background : background
+  com.mmmfingers.GameScene o-- com.mmmfingers.Background : background1
+  com.mmmfingers.GameScene o-- com.mmmfingers.Background : background2
+  com.mmmfingers.GameScene o-- com.mmmfingers.GamePanel : gamePanel
+  com.mmmfingers.GameScene o-- com.mmmfingers.Player : player
+  com.mmmfingers.GameThread o-- com.mmmfingers.GamePanel : gamePanel
+  com.mmmfingers.MainActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.mmmfingers.MyBroadcastReceiver -up-|> android.content.BroadcastReceiver
+  com.mmmfingers.Obstacle -up-|> com.mmmfingers.AnimatedSpritesObject
+  com.mmmfingers.Player -up-|> com.mmmfingers.AnimatedSpritesObject
+  com.mmmfingers.StartFragment -up-|> androidx.fragment.app.Fragment
+  com.mmmfingers.StartScene .up.|> android.view.SurfaceHolder.Callback
+  com.mmmfingers.StartScene -up-|> android.view.SurfaceView
+  com.mmmfingers.StartScene o-- com.mmmfingers.Background : background
+  com.mmmfingers.StartScene o-- com.mmmfingers.StartFragment : startFragment
+  com.mmmfingers.StartScene o-- com.mmmfingers.Button : startGameButton
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

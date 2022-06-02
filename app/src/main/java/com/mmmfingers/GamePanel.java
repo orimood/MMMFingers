@@ -283,17 +283,15 @@ public class GamePanel extends SurfaceView
         }
     }
 
-    public void checkScore(int score) {
-        if (score < -30) {
-            mainThreadHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    // Go to end screen
-                    NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment_content_main);
-                    navController.navigate(R.id.EndFragment);
-                }
-            });
-        }
+    public void endGame() {
+        mainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                // Go to end screen
+                NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment_content_main);
+                navController.navigate(R.id.EndFragment);
+            }
+        });
     }
 
     public void startNewGame() {
