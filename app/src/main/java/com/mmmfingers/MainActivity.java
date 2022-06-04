@@ -12,6 +12,7 @@ package com.mmmfingers;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
 //        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        appBarConfiguration = new AppBarConfiguration.Builder(R.id.StartFragment, R.id.GameFragment, R.id.EndFragment).build();
+        appBarConfiguration = new AppBarConfiguration.Builder(R.id.StartFragment, R.id.GameFragment, R.id.EndFragment, R.id.SettingsFragment).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
@@ -55,10 +56,12 @@ public class MainActivity extends AppCompatActivity {
                                              @NonNull NavDestination destination,
                                              @Nullable Bundle arguments) {
                 if (destination.getId() == R.id.GameFragment) {
+                    playBackgroundSound();
                     binding.toolbar.setVisibility(View.GONE);
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
                             WindowManager.LayoutParams.FLAG_FULLSCREEN);
                 } else {
+                    stopBackgroundSound();
                     binding.toolbar.setVisibility(View.VISIBLE);
                 }
             }
@@ -86,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
             navController.navigate(R.id.StartFragment);
             return true;
         } else if (id == R.id.action_settings) {
-            // Set to Settings PopUp
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+            navController.navigate(R.id.SettingsFragment);
             return true;
         } else if (id == R.id.action_exit) {
             // Exit Game
@@ -123,5 +127,15 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void playBackgroundSound() {
+        Intent intent = new Intent(MainActivity.this, BackgroundSoundService.class);
+        startService(intent);
+    }
+
+    public void stopBackgroundSound() {
+        Intent intent = new Intent(MainActivity.this, BackgroundSoundService.class);
+        stopService(intent);
     }
 }

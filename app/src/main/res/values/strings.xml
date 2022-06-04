@@ -5,6 +5,7 @@
     <string name="start_fragment_label">Welcome</string>
     <string name="game_fragment_label">Game</string>
     <string name="end_fragment_label">Good Game</string>
+    <string name="settings_fragment_label">Settings</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
