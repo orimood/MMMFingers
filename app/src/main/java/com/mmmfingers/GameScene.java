@@ -111,13 +111,13 @@ public class GameScene implements Scene {
         player.update();
 
         for (GameObject gameObject : animatedObjects) {
-            if (gamePanel.getGameLogic().collision(player, (AnimatedSpritesObject) gameObject)) {
+            if (GameLogic.getInstance().collision(player, (AnimatedSpritesObject) gameObject)) {
                 gamePanel.endGame();
                 return;
             }
         }
 
-        gamePanel.getGameLogic().incScore(1);
+        GameLogic.getInstance().incScore(1);
     }
 
     @Override
@@ -133,7 +133,7 @@ public class GameScene implements Scene {
 
         player.draw(canvas);
 
-        gamePanel.getGameLogic().showStateMessage(canvas);
+        GameLogic.getInstance().showStateMessage(canvas);
     }
 
     @Override

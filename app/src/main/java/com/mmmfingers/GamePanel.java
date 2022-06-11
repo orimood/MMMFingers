@@ -40,12 +40,6 @@ public class GamePanel extends SurfaceView
 
     /**
      * ******************************************************************
-     * game logic class - the "BRAIN" of our game, rules and more ...
-     * very important class - all the game algorithms are there
-     */
-    GameLogic gameLogic;
-    /**
-     * ******************************************************************
      */
 
     /**
@@ -78,7 +72,7 @@ public class GamePanel extends SurfaceView
     private final float scaleFactorXMul;
     private final float scaleFactorYMul;
 
-    //lets create the constructor of our new class,that is going to help us calling objects and methods!
+    // lets create the constructor of our new class,that is going to help us calling objects and methods!
     public GamePanel(Activity activity, int WIDTH, int HEIGHT) {
 
         /**
@@ -114,9 +108,6 @@ public class GamePanel extends SurfaceView
         scaleFactorXMul = 1.0f + ((WIDTH - Constants.ORIGINAL_SCREEN_WIDTH) * 1.0f / Constants.ORIGINAL_SCREEN_WIDTH);
         scaleFactorYMul = 1.0f + ((HEIGHT - Constants.ORIGINAL_SCREEN_HEIGHT) * 1.0f / Constants.ORIGINAL_SCREEN_HEIGHT);
 
-        // create GameLogic OBJECT
-        gameLogic = new GameLogic(this);
-
         thread = new GameThread(getHolder(), this);
 
         // create thread OBJECT
@@ -130,6 +121,8 @@ public class GamePanel extends SurfaceView
          on both touch mode and keypad mode(using up/down/next key).
          */
         setFocusable(true);
+
+        GameLogic.getInstance().resetGame();
     }
 
     /**
@@ -284,6 +277,8 @@ public class GamePanel extends SurfaceView
     }
 
     public void endGame() {
+        GameLogic.getInstance().setGameOver();
+
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -294,15 +289,9 @@ public class GamePanel extends SurfaceView
         });
     }
 
-    public void startNewGame() {
-        gameLogic.resetScore();
-        addScene(GameScene.SCENE_NAME);
-    }
-
     public void addScene(String sceneName) {
         sceneManager.addScene(sceneDictionary.get(sceneName));
         sceneManager.getScenes().peek().resetAll();
-
     }
 
     /**
@@ -318,10 +307,6 @@ public class GamePanel extends SurfaceView
 
     public static int getHEIGHT() {
         return HEIGHT;
-    }
-
-    public GameLogic getGameLogic() {
-        return gameLogic;
     }
 
 }//end of class

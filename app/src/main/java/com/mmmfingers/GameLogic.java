@@ -24,15 +24,25 @@ import android.graphics.Typeface;
 
 public class GameLogic {
 
-    private volatile int score;
+    private static GameLogic instance;
 
-    private final GamePanel gamePanel;
+    private volatile boolean gameOver;
+
+    private volatile int score;
 
     /**
      * Constructor
      */
-    public GameLogic(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
+    public GameLogic() {
+
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver() {
+        this.gameOver = true;
     }
 
     public int getScore() {
@@ -40,15 +50,20 @@ public class GameLogic {
     }
 
     public void incScore(int diff) {
-        score += diff;
+        if (!isGameOver()) {
+            score += diff;
+        }
     }
 
     public void decScore(int diff) {
-        score = Math.max(score - diff, -30);
+        if (!isGameOver()) {
+            score = Math.max(score - diff, -30);
+        }
     }
 
-    public void resetScore() {
+    public void resetGame() {
         score = 0;
+        gameOver = false;
     }
 
 
@@ -236,6 +251,13 @@ public class GameLogic {
 
     /**********************************************************************************************
      */
+
+    public synchronized static GameLogic getInstance() {
+        if (instance == null) {
+            instance = new GameLogic();
+        }
+        return instance;
+    }
 
 }
 

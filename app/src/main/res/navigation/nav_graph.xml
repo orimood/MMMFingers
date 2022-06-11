@@ -49,4 +49,14 @@
             android:id="@+id/action_SettingsFragment_to_GameFragment"
             app:destination="@id/GameFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/ScoreFragment"
+        android:name="com.mmmfingers.ScoreFragment"
+        android:label="@string/score_fragment_label"
+        tools:layout="@layout/fragment_score">
+
+        <action
+            android:id="@+id/action_ScoreFragment_to_StartFragment"
+            app:destination="@id/StartFragment" />
+    </fragment>
 </navigation>

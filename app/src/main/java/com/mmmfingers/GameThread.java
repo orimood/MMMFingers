@@ -11,7 +11,7 @@ import androidx.annotation.RequiresApi;
  * @since version 2.00
  * Study Android,
  * Modi'in, Yachad high-school.
- *
+ * <p>
  * *************************************************************
  * This class in a THREAD for creating a LOOP for screen (Game Panel) refresh - 30 times a second
  * it addresses two method on gamePanel object: "update" and "draw" methods
@@ -32,11 +32,11 @@ public class GameThread extends Thread {
 
     /**
      * The class holds the "draw" calls. To draw something, you need 4 basic components:
-     *    a Bitmap to hold the pixels,
-     *    a Canvas to host the draw calls (writing into the bitmap),
-     *    a drawing primitive (e.g. Rect, Path, text, Bitmap),
-     *	  and a paint
-
+     * a Bitmap to hold the pixels,
+     * a Canvas to host the draw calls (writing into the bitmap),
+     * a drawing primitive (e.g. Rect, Path, text, Bitmap),
+     * and a paint
+     * <p>
      * Now lets create the class constructor
      * For our thread constructor we need references of our Content view objects
      * 1. a SurfaceHolder ref
@@ -88,38 +88,41 @@ public class GameThread extends Thread {
              * we will develop our canvas code inside a try{}catch() in case something goes wrong
              */
 
-            try {
-                //we lock canvas to our content view
-                canvas = this.surfaceHolder.lockCanvas();
-
-                /**
-                 * and we want to be synchronized every time we update or draw
-                 * something on our screen in every frame... so our game will flow naturally
-                 **/
-                synchronized (surfaceHolder) {
+            if (!GameLogic.getInstance().isGameOver()) {
+                try {
+                    //we lock canvas to our content view
+                    canvas = this.surfaceHolder.lockCanvas();
 
                     /**
-                     * this is the game data update as for example the x and y position coordinates
-                     * for a little character (Sprites positions, Score base in time, ...)
-                     */
-                    this.gamePanel.update();
-
-                    /**
-                     * this is about drawing the picture you see in the screen.
-                     * When this method is called repeatedly it gives you
-                     * the perception of a MOVIE or of an animation.
+                     * and we want to be synchronized every time we update or draw
+                     * something on our screen in every frame... so our game will flow naturally
                      **/
-                    this.gamePanel.draw(canvas);
-                }//end synchronized
+                    synchronized (surfaceHolder) {
 
-            } catch (Exception e) {
-            }//end try
-            finally {
-                if (canvas != null) {
-                    try {
-                        surfaceHolder.unlockCanvasAndPost(canvas);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+
+                        /**
+                         * this is the game data update as for example the x and y position coordinates
+                         * for a little character (Sprites positions, Score base in time, ...)
+                         */
+                        this.gamePanel.update();
+
+                        /**
+                         * this is about drawing the picture you see in the screen.
+                         * When this method is called repeatedly it gives you
+                         * the perception of a MOVIE or of an animation.
+                         **/
+                        this.gamePanel.draw(canvas);
+                    }//end synchronized
+
+                } catch (Exception e) {
+                }//end try
+                finally {
+                    if (canvas != null) {
+                        try {
+                            surfaceHolder.unlockCanvasAndPost(canvas);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
