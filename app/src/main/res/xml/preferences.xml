@@ -5,9 +5,4 @@
         app:key="Sound"
         app:title="Disable sound"/>
 
-    <Preference
-        app:key="feedback"
-        app:title="Send feedback"
-        app:summary="Report technical issues or suggest new features"/>
-
 </PreferenceScreen>

@@ -8,18 +8,24 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.material.switchmaterial.SwitchMaterial;
+
 public class BackgroundSoundService extends Service {
     MediaPlayer mediaPlayer;
+
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+    private SwitchMaterial soundswitch;
+    private SettingsFragment settingsFragment;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
         mediaPlayer = MediaPlayer.create(this, R.raw.sound);
         mediaPlayer.setLooping(true); // Set looping
         mediaPlayer.setVolume(200, 200);

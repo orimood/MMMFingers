@@ -194,19 +194,6 @@ public class GamePanel extends SurfaceView
 
         sceneManager.receiveTouch(event);
 
-        // if game started
-//        switch (gameLogic.getGameState()) {
-//            case GAME_PLAYING_STATE: {
-//                gameScene.receiveTouch(action, xPosition, yPosition);
-//                break;
-//            }
-//            case GAME_START_STATE: {
-//                // start the game  after first tap on the screen
-//                if (action == MotionEvent.ACTION_UP)
-//                    gameLogic.setGameState(GameState.GAME_PLAYING_STATE);
-//            }
-//        }
-
         return true;
     }
 
