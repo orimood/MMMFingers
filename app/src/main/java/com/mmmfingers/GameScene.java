@@ -50,8 +50,8 @@ public class GameScene implements Scene {
         // create girl object
         player = new Player(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.player),
                 1, 1);
-        player.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2);
-        player.setY((Constants.ORIGINAL_SCREEN_HEIGHT / 4));
+        player.setX((Constants.GAME_SCREEN_WIDTH - player.getWidth()) / 2);
+        player.setY(Constants.GAME_SCREEN_HEIGHT - (Constants.GAME_SCREEN_HEIGHT / 4));
 
         // create square obstacles
         for (int i = 0; i < simpleObstacles.length; i++) {

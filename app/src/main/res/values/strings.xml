@@ -5,7 +5,7 @@
     <!-- Strings used for fragments for navigation -->
     <string name="start_fragment_label">Welcome</string>
     <string name="game_fragment_label">Game</string>
-    <string name="end_fragment_label">Good Game</string>
+    <string name="end_fragment_label">Game Over</string>
     <string name="settings_fragment_label">Settings</string>
     <string name="score_fragment_label">High Scores</string>
     <string name="next">Next</string>

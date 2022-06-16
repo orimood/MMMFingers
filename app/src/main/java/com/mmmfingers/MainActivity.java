@@ -13,7 +13,9 @@ package com.mmmfingers;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +41,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // get device screen size for game panel use
+        Display display = getWindowManager().getDefaultDisplay();
+        // display size in pixels
+        Point size = new Point();
+        display.getSize(size);
+
+        Constants.SCREEN_WIDTH = size.x;
+        Constants.SCREEN_HEIGHT = size.y;
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

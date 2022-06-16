@@ -36,8 +36,8 @@ public class EndScene extends SurfaceView implements SurfaceHolder.Callback {
 
         // create the start game button
         startGameButton = new Button((BitmapFactory.decodeResource(context.getResources(), R.drawable.start_btn)), 1, 1);
-        startGameButton.setX(Constants.ORIGINAL_SCREEN_WIDTH / 2 - startGameButton.getWidth() / 2);
-        startGameButton.setY(Constants.ORIGINAL_SCREEN_HEIGHT / 2 - startGameButton.getHeight());
+        startGameButton.setX(Constants.SCREEN_WIDTH / 2 - startGameButton.getWidth() / 2);
+        startGameButton.setY(Constants.SCREEN_HEIGHT / 2 - startGameButton.getHeight());
 
         startGameButton.setButtonTouchListener(new Button.OnButtonTouchListener() {
             @Override
@@ -87,13 +87,13 @@ public class EndScene extends SurfaceView implements SurfaceHolder.Callback {
         Paint textPaint = new Paint();
         textPaint.setTypeface(typeface);
         textPaint.setColor(Color.RED);
-        textPaint.setTextSize(200);
+        textPaint.setTextSize(150);
 
         Rect bounds = new Rect();
 
         int y = 200;
 
-        String endGameText = "Game Over";
+        String endGameText = "Ouch, that hurt!";
         textPaint.getTextBounds(endGameText, 0, endGameText.length(), bounds);
         canvas.drawText(endGameText, (GamePanel.getWIDTH() - bounds.width()) / 2, y, textPaint);
         y += bounds.height() + 50;
@@ -122,7 +122,10 @@ public class EndScene extends SurfaceView implements SurfaceHolder.Callback {
         return true;
     }
 
-
+    /**
+     * Add score to the preferences
+     * @param sp the score preference
+     */
     public void updateSp(SharedPreferences sp) {
         int highScoresCounter;
 

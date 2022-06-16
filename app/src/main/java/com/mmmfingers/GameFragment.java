@@ -19,13 +19,7 @@ public class GameFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        // get device screen size for game panel use
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        // display size in pixels
-        Point size = new Point();
-        display.getSize(size);
-
-        gamePanel = new GamePanel(getActivity(), size.x, size.y);
+        gamePanel = new GamePanel(getActivity());
         return gamePanel;
     }
 

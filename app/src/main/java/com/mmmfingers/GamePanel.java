@@ -73,7 +73,7 @@ public class GamePanel extends SurfaceView
     private final float scaleFactorYMul;
 
     // lets create the constructor of our new class,that is going to help us calling objects and methods!
-    public GamePanel(Activity activity, int WIDTH, int HEIGHT) {
+    public GamePanel(Activity activity) {
 
         /**
          context we receive from our activity,
@@ -89,8 +89,8 @@ public class GamePanel extends SurfaceView
         this.activity = activity;
 
         // of phone's dimensions
-        GamePanel.WIDTH = WIDTH;
-        GamePanel.HEIGHT = HEIGHT;
+        GamePanel.WIDTH = Constants.SCREEN_WIDTH;
+        GamePanel.HEIGHT = Constants.SCREEN_HEIGHT;
 
         sceneManager = new SceneManager();
 
@@ -105,8 +105,8 @@ public class GamePanel extends SurfaceView
          *
          * calculate multipliers of scaleFactorX, scaleFactorY
          */
-        scaleFactorXMul = 1.0f + ((WIDTH - Constants.ORIGINAL_SCREEN_WIDTH) * 1.0f / Constants.ORIGINAL_SCREEN_WIDTH);
-        scaleFactorYMul = 1.0f + ((HEIGHT - Constants.ORIGINAL_SCREEN_HEIGHT) * 1.0f / Constants.ORIGINAL_SCREEN_HEIGHT);
+        scaleFactorXMul = 1.0f + ((WIDTH - Constants.GAME_SCREEN_WIDTH) * 1.0f / Constants.GAME_SCREEN_WIDTH);
+        scaleFactorYMul = 1.0f + ((HEIGHT - Constants.GAME_SCREEN_HEIGHT) * 1.0f / Constants.GAME_SCREEN_HEIGHT);
 
         thread = new GameThread(getHolder(), this);
 

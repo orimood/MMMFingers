@@ -41,46 +41,32 @@ public class ScoreFragment extends Fragment {
          */
 
         // retrieve stored High Scores by...
-        // number of high scores stored in sp
-        int highScoresCounter = 0;
-
-        long points;
-
-        // StoredScore is the score class
-        // Array of all the scores in sp
-        ArrayList<StoredScore> scoresList = new ArrayList<>();
-        StoredScore storedScore;
-
         SharedPreferences sp = getActivity().getSharedPreferences("myGameShared", MODE_PRIVATE);
+
+        // Array of all the scores in sp
+        ArrayList<Long> scoreList = new ArrayList<>();
+
         // get highScoresCounter from sp
-        highScoresCounter = sp.getInt("highScoresCounter", 0);
+        int highScoresCounter = sp.getInt("highScoresCounter", 0);
         for (int i = 1; i <= highScoresCounter; i++) {
-            points = sp.getLong("score" + i, 0);
-            storedScore = new StoredScore(points);
-            scoresList.add(storedScore);
+            long score = sp.getLong("score" + i, 0);
+            scoreList.add(score);
         }
 
         // sort the scores
-        BubbleSort bubbleSort = new BubbleSort(scoresList);
+        BubbleSort bubbleSort = new BubbleSort(scoreList);
         bubbleSort.bubble_srt();
-        scoresList = bubbleSort.getListViewItems();
-
-        // update the list view of the high scores
-        StringBuffer stringBuffer = new StringBuffer();
+        scoreList = bubbleSort.getListViewItems();
 
         // show at least ten recodes of score ( even empty records )
-        int atList10RecordsToShow;
-        if (highScoresCounter < 10) atList10RecordsToShow = 10;
-        else atList10RecordsToShow = highScoresCounter;
+        int atList10RecordsToShow = Math.min(highScoresCounter, 8);
 
         String[] listViewItems = new String[atList10RecordsToShow];
         for (int i = 0; i < atList10RecordsToShow; i++) {
-            stringBuffer.delete(0, stringBuffer.length());
             // if there are score records then show them .....
             if (highScoresCounter > i) {
-                stringBuffer.append("Points :" + scoresList.get(i).score);
                 // lets make a list of items for the list
-                listViewItems[i] = stringBuffer.toString();
+                listViewItems[i] = "Points :" + scoreList.get(i);
             }
         }
 

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class BubbleSort {
 
-    private ArrayList<StoredScore> listViewItems;
+    private ArrayList<Long> listViewItems;
 
-    public BubbleSort(ArrayList<StoredScore> listViewItems) {
+    public BubbleSort(ArrayList<Long> listViewItems) {
         this.listViewItems = listViewItems;
     }
 
@@ -17,22 +17,18 @@ public class BubbleSort {
         for (int m = n; m >= 0; m--) {
             for (int i = 0; i < n - 1; i++) {
                 k = i + 1;
-                if (listViewItems.get(i).score < listViewItems.get(k).score) {
+                if (listViewItems.get(i) < listViewItems.get(k)) {
                     // swap Numbers
-                    long tempScore = listViewItems.get(i).score;
-                    listViewItems.get(i).score = listViewItems.get(k).score;
-                    listViewItems.get(k).score = tempScore;
+                    long tempScore = listViewItems.get(i);
+                    listViewItems.set(i, listViewItems.get(k));
+                    listViewItems.set(k, tempScore);
 
                 }
             }
         }
     }
 
-    public ArrayList<StoredScore> getListViewItems() {
+    public ArrayList<Long> getListViewItems() {
         return listViewItems;
-    }
-
-    public void setListViewItems(ArrayList<StoredScore> listViewItems) {
-        listViewItems = listViewItems;
     }
 }
