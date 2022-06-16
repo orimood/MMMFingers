@@ -38,6 +38,10 @@
         <action
             android:id="@+id/action_EndFragment_to_GameFragment"
             app:destination="@id/GameFragment" />
+
+        <action
+            android:id="@+id/action_EndFragment_to_ScoreFragment"
+            app:destination="@id/ScoreFragment" />
     </fragment>
     <fragment
         android:id="@+id/SettingsFragment"

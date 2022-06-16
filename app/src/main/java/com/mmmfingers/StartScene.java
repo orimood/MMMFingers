@@ -24,7 +24,7 @@
             getHolder().addCallback(this);
 
             // create the start game button
-            startGameButton = new Button((BitmapFactory.decodeResource(context.getResources(), R.drawable.start_btn)), 1, 1);
+            startGameButton = new Button((BitmapFactory.decodeResource(context.getResources(), R.drawable.button_startgame)), 1, 1);
             startGameButton.setX(Constants.SCREEN_WIDTH / 2 - startGameButton.getWidth() / 2);
             startGameButton.setY(Constants.SCREEN_HEIGHT / 2 - startGameButton.getHeight());
 

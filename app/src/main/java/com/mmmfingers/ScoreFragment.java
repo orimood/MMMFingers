@@ -2,6 +2,8 @@ package com.mmmfingers;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import static com.mmmfingers.ScoreUtils.getScoreList;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -44,19 +46,10 @@ public class ScoreFragment extends Fragment {
         SharedPreferences sp = getActivity().getSharedPreferences("myGameShared", MODE_PRIVATE);
 
         // Array of all the scores in sp
-        ArrayList<Long> scoreList = new ArrayList<>();
+        ArrayList<Long> scoreList = getScoreList(sp);
 
         // get highScoresCounter from sp
         int highScoresCounter = sp.getInt("highScoresCounter", 0);
-        for (int i = 1; i <= highScoresCounter; i++) {
-            long score = sp.getLong("score" + i, 0);
-            scoreList.add(score);
-        }
-
-        // sort the scores
-        BubbleSort bubbleSort = new BubbleSort(scoreList);
-        bubbleSort.bubble_srt();
-        scoreList = bubbleSort.getListViewItems();
 
         // show at least ten recodes of score ( even empty records )
         int atList10RecordsToShow = Math.min(highScoresCounter, 8);

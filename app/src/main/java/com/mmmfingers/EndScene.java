@@ -1,6 +1,8 @@
 package com.mmmfingers;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.mmmfingers.ScoreUtils.getScoreList;
+import static com.mmmfingers.ScoreUtils.updateScore;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,13 +20,16 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 import androidx.navigation.fragment.NavHostFragment;
 
+import java.util.ArrayList;
+
 public class EndScene extends SurfaceView implements SurfaceHolder.Callback {
 
     private EndFragment endFragment;
 
     private Background background;
 
-    private final Button startGameButton;
+    private final Button startAgainButton;
+    private final Button highScoresButton;
 
     private Typeface typeface;
 
@@ -34,12 +39,12 @@ public class EndScene extends SurfaceView implements SurfaceHolder.Callback {
 
         typeface = Typeface.createFromAsset(context.getAssets(), "font/inkfree.ttf");
 
-        // create the start game button
-        startGameButton = new Button((BitmapFactory.decodeResource(context.getResources(), R.drawable.start_btn)), 1, 1);
-        startGameButton.setX(Constants.SCREEN_WIDTH / 2 - startGameButton.getWidth() / 2);
-        startGameButton.setY(Constants.SCREEN_HEIGHT / 2 - startGameButton.getHeight());
+            // create the start game button
+        startAgainButton = new Button((BitmapFactory.decodeResource(context.getResources(), R.drawable.button_again)), 1, 1);
+        startAgainButton.setX(Constants.SCREEN_WIDTH / 2 - startAgainButton.getWidth() / 2);
+        startAgainButton.setY(Constants.SCREEN_HEIGHT / 2 - startAgainButton.getHeight());
 
-        startGameButton.setButtonTouchListener(new Button.OnButtonTouchListener() {
+        startAgainButton.setButtonTouchListener(new Button.OnButtonTouchListener() {
             @Override
             public void onTouchDown() {
 
@@ -54,13 +59,32 @@ public class EndScene extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
         });
+
+        highScoresButton = new Button((BitmapFactory.decodeResource(context.getResources(), R.drawable.button_highscores)), 1, 1);
+        highScoresButton.setX(Constants.SCREEN_WIDTH / 2 - highScoresButton.getWidth() / 2);
+        highScoresButton.setY(Constants.SCREEN_HEIGHT / 2 - startAgainButton.getHeight() + 50);
+
+        highScoresButton.setButtonTouchListener(new Button.OnButtonTouchListener() {
+            @Override
+            public void onTouchDown() {
+
+            }
+
+            @Override
+            public void onTouchUp() {
+                if (endFragment != null) {
+                    NavHostFragment.findNavController(endFragment)
+                            .navigate(R.id.action_EndFragment_to_ScoreFragment);
+                }
+            }
+        });
     }
 
     public void setEndFragment(EndFragment endFragment) {
         this.endFragment = endFragment;
 
         SharedPreferences sp = endFragment.getActivity().getSharedPreferences("myGameShared", MODE_PRIVATE);
-        updateSp(sp);
+        updateScore(sp, GameLogic.getInstance().getScore());
     }
 
     @Override
@@ -89,6 +113,11 @@ public class EndScene extends SurfaceView implements SurfaceHolder.Callback {
         textPaint.setColor(Color.RED);
         textPaint.setTextSize(150);
 
+        Paint highScorePaint = new Paint();
+        highScorePaint.setTypeface(typeface);
+        highScorePaint.setColor(Color.rgb(218,165,32));
+        highScorePaint.setTextSize(150);
+
         Rect bounds = new Rect();
 
         int y = 200;
@@ -103,43 +132,38 @@ public class EndScene extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawText(scoreText, (GamePanel.getWIDTH() - bounds.width()) / 2, y, textPaint);
         y += bounds.height() + 50;
 
-        startGameButton.setY(y);
+        SharedPreferences sp = endFragment.getActivity().getSharedPreferences("myGameShared", MODE_PRIVATE);
+        ArrayList<Long> scoreList = getScoreList(sp);
+        if (GameLogic.getInstance().getScore() == scoreList.get(0)) {
+            String highScoreText = "New Highscore!";
+            highScorePaint.getTextBounds(highScoreText, 0, highScoreText.length(), bounds);
+            canvas.drawText(highScoreText, (GamePanel.getWIDTH() - bounds.width()) / 2, y, highScorePaint);
+            y += bounds.height() + 50;
+        }
 
-        startGameButton.draw(canvas);
+        startAgainButton.setY(y);
+
+        highScoresButton.setY(y+ 250 + startAgainButton.getHeight());
+
+
+        startAgainButton.draw(canvas);
+        highScoresButton.draw(canvas);
     }
+
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (startGameButton.onTouchEvent(event)) {
+        if (startAgainButton.onTouchEvent(event)) {
             return true;
         }
 
-        if (endFragment != null && event.getAction() == MotionEvent.ACTION_UP) {
-            NavHostFragment.findNavController(endFragment)
-                    .navigate(R.id.action_EndFragment_to_StartFragment);
+        if (highScoresButton.onTouchEvent(event)){
+            return true;
         }
+
 
         return true;
     }
 
-    /**
-     * Add score to the preferences
-     * @param sp the score preference
-     */
-    public void updateSp(SharedPreferences sp) {
-        int highScoresCounter;
-
-        // if sp exists then get highScoresCounter from sp
-        if (sp != null)
-            highScoresCounter = sp.getInt("highScoresCounter", 0);
-        else highScoresCounter = 0;
-
-        highScoresCounter++;
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putInt("highScoresCounter", highScoresCounter);
-        editor.putLong("score" + highScoresCounter, GameLogic.getInstance().getScore());
-
-        // save
-        editor.commit();
-    }
 }
