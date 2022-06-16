@@ -13,6 +13,7 @@ package com.mmmfingers;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
@@ -34,6 +35,8 @@ import androidx.navigation.ui.NavigationUI;
 import com.mmmfingers.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+
+    private MyBroadcastReceiver broadcastReceiver = new MyBroadcastReceiver();
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
@@ -152,5 +155,24 @@ public class MainActivity extends AppCompatActivity {
     public void stopBackgroundSound() {
         Intent intent = new Intent(MainActivity.this, BackgroundSoundService.class);
         stopService(intent);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        IntentFilter filter1 = new IntentFilter(Intent.ACTION_BATTERY_LOW);
+        registerReceiver(broadcastReceiver, filter1);
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(broadcastReceiver);
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

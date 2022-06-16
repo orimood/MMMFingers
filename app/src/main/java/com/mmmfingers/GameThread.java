@@ -1,10 +1,7 @@
 package com.mmmfingers;
 
 import android.graphics.Canvas;
-import android.os.Build;
 import android.view.SurfaceHolder;
-
-import androidx.annotation.RequiresApi;
 
 /**
  * @version version 2.00
@@ -55,7 +52,6 @@ public class GameThread extends Thread {
      * Now we will override the run method. All thread have a run method
      * So to get advantage of the thread we will write our time code inside the run method
      */
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void run() {
         /**
@@ -98,7 +94,6 @@ public class GameThread extends Thread {
                      * something on our screen in every frame... so our game will flow naturally
                      **/
                     synchronized (surfaceHolder) {
-
 
                         /**
                          * this is the game data update as for example the x and y position coordinates

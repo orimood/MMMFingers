@@ -15,12 +15,11 @@ public class CustomAdapter extends ArrayAdapter<String> {
 
 
     /**
-     * @param position    the position of the next item in the list
+     * @param position the position of the next item in the list
      * @param convertView convert this custom view
      * @return single Item
      */
     @Override
-
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         // one custom view

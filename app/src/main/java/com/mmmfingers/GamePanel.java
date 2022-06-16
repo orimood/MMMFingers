@@ -34,8 +34,6 @@ public class GamePanel extends SurfaceView
     private final Map<String, Scene> sceneDictionary = new HashMap<>();
     private final Map<String, PopUp> popUpDictionary = new HashMap<>();
 
-    private final GameThread thread;
-
     private final Handler mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
     /**
@@ -108,9 +106,7 @@ public class GamePanel extends SurfaceView
         scaleFactorXMul = 1.0f + ((WIDTH - Constants.GAME_SCREEN_WIDTH) * 1.0f / Constants.GAME_SCREEN_WIDTH);
         scaleFactorYMul = 1.0f + ((HEIGHT - Constants.GAME_SCREEN_HEIGHT) * 1.0f / Constants.GAME_SCREEN_HEIGHT);
 
-        thread = new GameThread(getHolder(), this);
-
-        // create thread OBJECT
+        // create game thread
         gameThread = new GameThread(getHolder(), this);
 
         getHolder().addCallback(this);

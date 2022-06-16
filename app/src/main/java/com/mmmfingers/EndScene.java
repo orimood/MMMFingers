@@ -134,7 +134,7 @@ public class EndScene extends SurfaceView implements SurfaceHolder.Callback {
 
         SharedPreferences sp = endFragment.getActivity().getSharedPreferences("myGameShared", MODE_PRIVATE);
         ArrayList<Long> scoreList = getScoreList(sp);
-        if (GameLogic.getInstance().getScore() == scoreList.get(0)) {
+        if (GameLogic.getInstance().getScore() >= scoreList.get(0)) {
             String highScoreText = "New Highscore!";
             highScorePaint.getTextBounds(highScoreText, 0, highScoreText.length(), bounds);
             canvas.drawText(highScoreText, (GamePanel.getWIDTH() - bounds.width()) / 2, y, highScorePaint);
