@@ -2,6 +2,7 @@ package com.mmmfingers;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;

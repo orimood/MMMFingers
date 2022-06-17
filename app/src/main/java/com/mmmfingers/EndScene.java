@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 public class EndScene extends SurfaceView implements SurfaceHolder.Callback {
 
     private EndFragment endFragment;
+
 
     private Background background;
 
