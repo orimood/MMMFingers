@@ -28,7 +28,7 @@ public class BackgroundSoundService extends Service {
         if (!isMute) {
             mediaPlayer = MediaPlayer.create(this, R.raw.sound);
             mediaPlayer.setLooping(true); // Set looping
-            mediaPlayer.setVolume(200, 200);
+            mediaPlayer.setVolume(700, 700);
         }
     }
 

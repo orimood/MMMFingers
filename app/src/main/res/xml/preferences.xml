@@ -3,6 +3,7 @@
 
     <SwitchPreferenceCompat
         app:key="mute"
-        app:title="Disable sound"/>
+        app:title="Disable sound"
+        />
 
 </PreferenceScreen>
