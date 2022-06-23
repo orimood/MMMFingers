@@ -59,11 +59,12 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
+        //intitialize all fragemnts
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         appBarConfiguration = new AppBarConfiguration.Builder(R.id.StartFragment, R.id.GameFragment, R.id.EndFragment, R.id.SettingsFragment, R.id.ScoreFragment).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+        //if we are in game fragment, start music
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller,

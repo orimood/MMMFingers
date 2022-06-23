@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".EndFragment">
 
-    <com.mmmfingers.EndScene
-        android:id="@+id/end_scene"
+    <com.mmmfingers.EndView
+        android:id="@+id/end_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         app:layout_constraintBottom_toTopOf="parent"

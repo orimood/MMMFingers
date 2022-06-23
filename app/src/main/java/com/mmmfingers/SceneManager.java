@@ -6,37 +6,39 @@ import android.view.MotionEvent;
 
 import java.util.Stack;
 
+/**
+ * Study Android:
+ * MODI'IN, YACHAD high-school.
+ *
+ * @author Ori Sinvani.
+ * @version version 2.00
+ * @since version 2.00
+ */
 
+//not currently in use, but if in future i want to add more levels
 public class SceneManager {
 
     private final Stack<Scene> scenes;
-    private final Stack<PopUp> popUps;
+
 
     public SceneManager() {
         scenes = new Stack<Scene>();
-        popUps = new Stack<PopUp>();
+
     }
 
 
     public void update() {
-        if (!popUps.isEmpty())
-            popUps.peek().update();
-        else if (!scenes.isEmpty())
+        if (!scenes.isEmpty())
             scenes.peek().update();
 
     }
 
     public void draw(Canvas canvas) {
         scenes.peek().draw(canvas);
-        if (!popUps.isEmpty())
-            popUps.peek().draw(canvas);
-
     }
 
     public void receiveTouch(MotionEvent touch) {
-        if (!popUps.isEmpty())
-            popUps.peek().receiveTouch(touch);
-        else if (!scenes.isEmpty())
+        if (!scenes.isEmpty())
             scenes.peek().receiveTouch(touch);
 
     }
@@ -45,13 +47,6 @@ public class SceneManager {
         scenes.push(scene);
     }
 
-    public void openPopUp(PopUp popUp) {
-        popUps.push(popUp);
-    }
-
-    public void closePopUp() {
-        popUps.pop();
-    }
 
     public void removeScene() {
         scenes.pop();
@@ -61,7 +56,4 @@ public class SceneManager {
         return scenes;
     }
 
-    public Stack<PopUp> getPopUps() {
-        return popUps;
-    }
 }

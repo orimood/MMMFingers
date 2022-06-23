@@ -5,34 +5,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.mmmfingers.databinding.FragmentEndBinding;
+/**
+ * @author Ori Sinvani.
+ * @version version 1.50
+ * MMM Fingers Project
+ * Modi-in, YACHAD high-school.
+ *
+ * *************************************************************
+ * this class is the fragment that hold our endview
+ * *************************************************************
+ */
 
 public class EndFragment extends Fragment {
-
-    private FragmentEndBinding binding;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentEndBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        return FragmentEndBinding.inflate(inflater, container, false).getRoot();
     }
-
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        binding.endScene.setEndFragment(this);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
 }

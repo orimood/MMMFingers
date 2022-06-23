@@ -4,17 +4,12 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 /**
- * Created by Eli Guriel on 20,September,2018.
- * Updated on 09/11/2020.
- *
  * @author Ori Sinvani.
- * @version version 2.00
- * @since version 2.00
- * <p>
- * Study Android,
+ * @version version 1.50
+ * MMM Fingers Project
  * Modi-in, YACHAD high-school.
- * <p>
- * ***************************************3**************************
+ *
+ * ******************************************************************
  * Class description:
  * This is the main image object
  * it is abstract, that mean, it is telling has what to do

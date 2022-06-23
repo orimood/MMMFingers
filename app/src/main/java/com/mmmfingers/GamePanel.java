@@ -1,6 +1,6 @@
 package com.mmmfingers;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,11 +9,22 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.core.os.HandlerCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.fragment.NavHostFragment;
 
 import java.util.HashMap;
 import java.util.Map;
+/**
+ * @author Ori Sinvani.
+ * @version version 1.50
+ * MMM Fingers Project
+ * Modi-in, YACHAD high-school.
+ *
+ * *************************************************************
+ * this class
+ * *************************************************************
+ */
 
 public class GamePanel extends SurfaceView
         implements SurfaceHolder.Callback {
@@ -26,13 +37,10 @@ public class GamePanel extends SurfaceView
     private static int WIDTH;
     private static int HEIGHT;
 
-    private final Activity activity;
-
     private final SceneManager sceneManager;
     public static Canvas canvas;
 
     private final Map<String, Scene> sceneDictionary = new HashMap<>();
-    private final Map<String, PopUp> popUpDictionary = new HashMap<>();
 
     private final Handler mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
@@ -71,7 +79,7 @@ public class GamePanel extends SurfaceView
     private final float scaleFactorYMul;
 
     // lets create the constructor of our new class,that is going to help us calling objects and methods!
-    public GamePanel(Activity activity) {
+    public GamePanel(Context context) {
 
         /**
          context we receive from our activity,
@@ -81,10 +89,7 @@ public class GamePanel extends SurfaceView
          and we pass the context to the super class - which is "SurfaceView", cause it needs it
          to do it staff.
          */
-
-        super(activity);
-
-        this.activity = activity;
+        super(context);
 
         // of phone's dimensions
         GamePanel.WIDTH = Constants.SCREEN_WIDTH;
@@ -180,14 +185,6 @@ public class GamePanel extends SurfaceView
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
-        int action = event.getAction();
-        int xPosition, yPosition;
-
-        // adjust x and y the screen resolution by dividing by the factors
-        xPosition = (int) (event.getX() / scaleFactorXMul);
-        yPosition = (int) (event.getY() / scaleFactorYMul);
-
         sceneManager.receiveTouch(event);
 
         return true;
@@ -200,11 +197,6 @@ public class GamePanel extends SurfaceView
      */
     public void update() {
         sceneManager.update();
-
-        // if game started
-//        if (gameLogic.getGameState() == GameState.GAME_PLAYING_STATE) {
-//            gameScene.update();
-//        }
     }
 
     /**
@@ -239,20 +231,6 @@ public class GamePanel extends SurfaceView
             canvas.scale(scaleFactorX * scaleFactorXMul, scaleFactorY * scaleFactorYMul);
 
             sceneManager.draw(canvas);
-            // if game started
-//            switch (gameLogic.getGameState()) {
-//                case GAME_PLAYING_STATE: {
-//                    gameScene.draw(canvas);
-//                    break;
-//                }
-//                // game not stared, so show game start message
-//                case GAME_START_STATE: {
-//                    // set background color
-//                    canvas.drawColor(Color.argb(50, 0, 102, 102));
-//
-//                    break;
-//                }
-//            }
 
             // restore the saves canvas state back
             canvas.restoreToCount(savedState);
@@ -262,14 +240,8 @@ public class GamePanel extends SurfaceView
     public void endGame() {
         GameLogic.getInstance().setGameOver();
 
-        mainThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                // Go to end screen
-                NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment_content_main);
-                navController.navigate(R.id.EndFragment);
-            }
-        });
+        EndGameAction endGameAction = new EndGameAction();
+        mainThreadHandler.post(endGameAction);
     }
 
     public void addScene(String sceneName) {
@@ -290,6 +262,19 @@ public class GamePanel extends SurfaceView
 
     public static int getHEIGHT() {
         return HEIGHT;
+    }
+
+    /**
+     *
+     */
+    private class EndGameAction implements Runnable {
+        @Override
+        public void run() {
+            // Go to end screen
+            Fragment fragment = FragmentManager.findFragment(GamePanel.this);
+            NavHostFragment.findNavController(fragment)
+                    .navigate(R.id.action_GameFragment_to_EndFragment);
+        }
     }
 
 }//end of class

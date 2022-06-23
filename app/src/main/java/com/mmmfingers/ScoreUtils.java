@@ -4,6 +4,17 @@ import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 
+/**
+ * @author Ori Sinvani.
+ * @version version 1.50
+ * MMM Fingers Project
+ * Modi-in, YACHAD high-school.
+ *
+ * *************************************************************
+ * this class holds methods to help with storing scores
+ * *************************************************************
+ */
+
 public class ScoreUtils {
 
     public static ArrayList<Long> getScoreList(SharedPreferences sp){

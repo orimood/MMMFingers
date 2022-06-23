@@ -18,6 +18,16 @@ import androidx.fragment.app.Fragment;
 import com.mmmfingers.databinding.FragmentScoreBinding;
 
 import java.util.ArrayList;
+/**
+ * @author Ori Sinvani.
+ * @version version 1.50
+ * MMM Fingers Project
+ * Modi-in, YACHAD high-school.
+ *
+ * *************************************************************
+ * this class is the fragment that hold our highcdore list
+ * *************************************************************
+ */
 
 public class ScoreFragment extends Fragment {
 

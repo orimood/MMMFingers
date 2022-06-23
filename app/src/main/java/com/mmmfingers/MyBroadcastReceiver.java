@@ -3,6 +3,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
+/**
+ * @author Ori Sinvani.
+ * @version version 1.50
+ * MMM Fingers Project
+ * Modi-in, YACHAD high-school.
+ *
+ * *************************************************************
+ * this class is the fragment that hold our GameScene, which is where the game runs
+ * *************************************************************
+ */
 
 public class MyBroadcastReceiver extends BroadcastReceiver {
 

@@ -2,14 +2,24 @@ package com.mmmfingers;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.media.MediaPlayer;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * @author Ori Sinvani.
+ * @version version 1.50
+ * MMM Fingers Project
+ * Modi-in, YACHAD high-school.
+ *
+ * *************************************************************
+ * this class is the scene where our game runs
+ * creates all objects used
+ * *************************************************************
+ */
 
 public class GameScene implements Scene {
-    private final static int DISTANCE = 200;
+
 
     private final GamePanel gamePanel;
 
@@ -18,7 +28,7 @@ public class GameScene implements Scene {
     private final List<GameObject> animatedObjects = new ArrayList<>();
 
     // the background of our game
-    private Background background, background1, background2;
+    private Background background1;
     private Player player;
 
     private final Obstacle[] animatedObstacles = new Obstacle[6];
@@ -29,15 +39,9 @@ public class GameScene implements Scene {
     public GameScene(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
 
-        background = new Background(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.background1),
-                1, 1);
         background1 = new Background(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.background1),
                 1, 1);
 
-        // background of the game, some background picture
-        background2 = new Background(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.background1),
-                1, 1);
-        background2.setY(-background2.height);
 
 
         /**
@@ -108,7 +112,6 @@ public class GameScene implements Scene {
         }
 
         background1.update();
-        background2.update();
         player.update();
 
         for (GameObject gameObject : animatedObjects) {
@@ -124,9 +127,8 @@ public class GameScene implements Scene {
     @Override
     public void draw(Canvas canvas) {
         // draw the static background (TODO: fix)
-        background.draw(canvas);
         background1.draw(canvas);
-        background2.draw(canvas);
+
 
         for (GameObject gameObject : animatedObjects) {
             gameObject.draw(canvas);

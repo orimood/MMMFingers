@@ -3,7 +3,17 @@ package com.mmmfingers;
 import android.graphics.Bitmap;
 
 import java.util.Random;
-
+/**
+ * @author Ori Sinvani.
+ * @version version 1.50
+ * MMM Fingers Project
+ * Modi-in, YACHAD high-school.
+ *
+ * *************************************************************
+ * this class is the main class of the game obstacles
+ * extending animatedspritesobject so we can get methods
+ * *************************************************************
+ */
 
 class Obstacle extends AnimatedSpritesObject {
 
@@ -25,6 +35,8 @@ class Obstacle extends AnimatedSpritesObject {
 
     @Override
     public void update() {
+
+        // fall all the time
         if (y > GamePanel.getHEIGHT()) {
             y = -distance;
             x = getNextX();
@@ -32,7 +44,10 @@ class Obstacle extends AnimatedSpritesObject {
 
         y = y + Constants.OBSTACLE_DROPPING_RATE;
 
+        //if movex is implemented, so only for the squares
         if (moveX) {
+
+            //if to close to border, switch directions
             if (getX() < -30) {
                 currentMoveX = -currentMoveX;
             }

@@ -3,6 +3,18 @@ package com.mmmfingers;
 
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
+/**
+ * @author Ori Sinvani.
+ * @version version 1.50
+ * MMM Fingers Project
+ * Modi-in, YACHAD high-school.
+ *
+ * *************************************************************
+ * this class extends the AnimatedSpritesObject class
+ * and adds:
+ * Button class as a type of object with some helpful method
+ * *************************************************************
+ */
 
 public class Button extends AnimatedSpritesObject {
 
@@ -18,14 +30,6 @@ public class Button extends AnimatedSpritesObject {
     @Override
     public void update() {
         animation.setSprite(spriteNumber);
-    }
-
-    public int getSpriteNumber() {
-        return spriteNumber;
-    }
-
-    public void setSpriteNumber(int spriteNumber) {
-        this.spriteNumber = spriteNumber;
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -57,10 +61,7 @@ public class Button extends AnimatedSpritesObject {
         return false;
     }
 
-    public OnButtonTouchListener getButtonTouchListener() {
-        return buttonTouchListener;
-    }
-
+    //sets listener that waits for when button is touched
     public void setButtonTouchListener(OnButtonTouchListener buttonTouchListener) {
         this.buttonTouchListener = buttonTouchListener;
     }

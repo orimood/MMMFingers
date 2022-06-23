@@ -4,9 +4,8 @@ import android.graphics.Bitmap;
 
 /**
  * @author Ori Sinvani.
- * @version version 2.00
- * @since version 2.00
- * Study Android,
+ * @version version 1.50
+ * MMM Fingers Project
  * Modi-in, YACHAD high-school.
  *
  * *****************************************************************

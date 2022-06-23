@@ -9,24 +9,36 @@
     import android.view.SurfaceView;
 
     import androidx.annotation.NonNull;
+    import androidx.fragment.app.Fragment;
+    import androidx.fragment.app.FragmentManager;
     import androidx.navigation.fragment.NavHostFragment;
+    /**
+     * @author Ori Sinvani.
+     * @version version 1.50
+     * MMM Fingers Project
+     * Modi-in, YACHAD high-school.
+     *
+     * *************************************************************
+     * this class is the view where our game is started at
+     * *************************************************************
+     */
 
-    public class StartScene extends SurfaceView implements SurfaceHolder.Callback {
-
-        private StartFragment startFragment;
+    public class StartView extends SurfaceView implements SurfaceHolder.Callback {
 
         private Background background;
 
         private final Button startGameButton;
 
-        public StartScene(Context context, AttributeSet attributeSet) {
+        public StartView(Context context, AttributeSet attributeSet) {
             super(context, attributeSet);
             getHolder().addCallback(this);
+
+            background = new Background((BitmapFactory.decodeResource(context.getResources(), R.drawable.start_screen)), 1, 1);
 
             // create the start game button
             startGameButton = new Button((BitmapFactory.decodeResource(context.getResources(), R.drawable.button_startgame)), 1, 1);
             startGameButton.setX(Constants.SCREEN_WIDTH / 2 - startGameButton.getWidth() / 2);
-            startGameButton.setY(Constants.SCREEN_HEIGHT / 2 - startGameButton.getHeight());
+            startGameButton.setY(Constants.SCREEN_HEIGHT / 3 - startGameButton.getHeight());
 
             startGameButton.setButtonTouchListener(new Button.OnButtonTouchListener() {
                 @Override
@@ -37,18 +49,14 @@
                 @Override
                 public void onTouchUp() {
                     // if start button was clicked, tell the start fragment to move to the game fragment
-                    if (startFragment != null) {
-                        NavHostFragment.findNavController(startFragment)
-                                .navigate(R.id.action_StartFragment_to_GameFragment);
-                    }
+                    Fragment fragment = FragmentManager.findFragment(StartView.this);
+                    NavHostFragment.findNavController(fragment)
+                            .navigate(R.id.action_StartFragment_to_GameFragment);
                 }
             });
         }
 
-        public void setStartFragment(StartFragment startFragment) {
-            this.startFragment = startFragment;
-        }
-
+        //locks canvas between ticks
         @Override
         public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
             Canvas c = getHolder().lockCanvas();
@@ -69,7 +77,7 @@
         @Override
         public void draw(Canvas canvas) {
             super.draw(canvas);
-
+            background.draw(canvas);
             startGameButton.draw(canvas);
         }
 

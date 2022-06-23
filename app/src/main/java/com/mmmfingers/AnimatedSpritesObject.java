@@ -2,17 +2,14 @@ package com.mmmfingers;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.util.Log;
 
 
 /**
  * @author Ori Sinvani.
- * @version version 2.00
- * @since version 2.00
- * Study Android,
+ * @version version 1.50
+ * MMM Fingers Project
  * Modi-in, YACHAD high-school.
- * <p>
+ *
  * *************************************************************
  * this class extends the GameObject class
  * and adds:

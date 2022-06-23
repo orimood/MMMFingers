@@ -1,16 +1,14 @@
 package com.mmmfingers;
 
 /**
- * Study Android:
- * MODI'IN, YACHAD high-school.
- *
  * @author Ori Sinvani.
- * @version version 2.00
- * @since version 2.00
- */
-
-/**
- * Constants elements
+ * @version version 1.50
+ * MMM Fingers Project
+ * Modi-in, YACHAD high-school.
+ *
+ * *************************************************************
+ * this class adds constant elements we use in the game
+ * *************************************************************
  */
 public class Constants {
     // game screen resolution

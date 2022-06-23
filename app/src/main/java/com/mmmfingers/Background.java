@@ -3,13 +3,16 @@ package com.mmmfingers;
 import android.graphics.Bitmap;
 
 /**
- * Study Android:
- * MODI'IN, YACHAD high-school.
- *
- * @author Created by Eli Guriel on 20,September,2018.
  * @author Ori Sinvani.
- * @version version 2.00
- * @since version 2.00
+ * @version version 1.50
+ * MMM Fingers Project
+ * Modi-in, YACHAD high-school.
+ *
+ * *************************************************************
+ * this class extends the AnimatedSpritesObject class
+ * and adds:
+ * scrolling background for the game
+ * *************************************************************
  */
 
 public class Background extends AnimatedSpritesObject {
@@ -21,8 +24,5 @@ public class Background extends AnimatedSpritesObject {
 
     @Override
     public void update() {
-        y = y + 10;
-        if (y >= height)
-            y = -height;
     }
 }//end class
